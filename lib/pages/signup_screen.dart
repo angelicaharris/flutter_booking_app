@@ -6,7 +6,7 @@ import 'package:flutter_booking_app/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_booking_app/pages/home.dart';
 import 'package:flutter_booking_app/utils/color_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_booking_app/AuthenticationService/AuthenticationService.dart';
+
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -34,7 +34,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
       body: Container(
-          key: _key,
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(

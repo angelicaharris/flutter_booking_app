@@ -13,19 +13,19 @@ class Cart_products extends StatefulWidget {
 class _Cart_productsState extends State<Cart_products> {
   var Products_on_the_cart = [
     {
-      "name": "Blazer",
-      "picture": "assets/images/c1.jpg",
-      "price": 85,
-      "size": "M",
-      "color": "Black",
+      "name": "James",
+      "picture": "assets/images/c5.jpg",
+      "price": 50,
+      "size": "ACT Reading",
+      "color": "3",
       "quantity": 1,
     },
     {
-      "name": "Shoes",
-      "picture": "assets/images/c1.jpg",
-      "price": 85,
-      "size": "7",
-      "color": "Red",
+      "name": "Ken",
+      "picture": "assets/images/c6.jpg",
+      "price": 55,
+      "size": "ACT Math",
+      "color": "5",
       "quantity": 1,
     },
   ];

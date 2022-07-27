@@ -10,26 +10,26 @@ class HorizontalList extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
-          Category(
+       /*   Category(
             image_location: 'assets/images/c2.png',
-            image_caption: 'shirt',
+            image_caption: 'ACT English',
           ),
           Category(
             image_location: 'assets/images/c2.png',
-            image_caption: 'dress',
+            image_caption: 'ACT Math',
           ),
           Category(
             image_location: 'assets/images/c2.png',
-            image_caption: 'pants',
+            image_caption: 'ACT Reading',
           ),
           Category(
             image_location: 'assets/images/c2.png',
-            image_caption: 'formal',
+            image_caption: 'ACT Science',
           ),
           Category(
             image_location: 'assets/images/c2.png',
-            image_caption: 'shirt',
-          ),
+            image_caption: 'ACT Writing',
+          ),*/
         ],
       ),
     );

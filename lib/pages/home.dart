@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       appBar: new AppBar(
         elevation: 0.1,
         backgroundColor: Colors.red,
-        title: Text('Fashapp'),
+        title: Text('Find A Tutor Right for You'),
         actions: <Widget>[
           new IconButton(
             icon: Icon(
@@ -60,6 +60,12 @@ class _HomePageState extends State<HomePage> {
               onPressed: null),
           new IconButton(
               icon: Icon(
+                Icons.chat,
+                color: Colors.white,
+              ),
+              onPressed: null),
+          new IconButton(
+              icon: Icon(
                 Icons.shopping_cart,
                 color: Colors.white,
               ),
@@ -67,6 +73,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => new Cart()));
               }),
+          
         ],
       ),
       drawer: new Drawer(
@@ -107,7 +114,7 @@ class _HomePageState extends State<HomePage> {
             InkWell(
               onTap: () {},
               child: ListTile(
-                title: Text('My orders'),
+                title: Text('My Lessons'),
                 leading: Icon(Icons.shopping_basket, color: Colors.red),
               ),
             ),
@@ -118,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) => new Cart()));
               },
               child: ListTile(
-                title: Text('Shopping Cart'),
+                title: Text('Purchases'),
                 leading: Icon(
                   Icons.shopping_cart,
                   color: Colors.red,
@@ -129,7 +136,7 @@ class _HomePageState extends State<HomePage> {
             InkWell(
               onTap: () {},
               child: ListTile(
-                title: Text('Favorites'),
+                title: Text('Past Lessons'),
                 leading: Icon(Icons.favorite, color: Colors.red),
               ),
             ),
@@ -169,7 +176,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(4.0),
             child: Container(
                 alignment: Alignment.centerLeft,
-                child: new Text('Categories!')),
+                child: new Text('')),
           ),
 
           //Horizontal list view begins here
@@ -178,7 +185,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(4.0),
             child: Container(
                 alignment: Alignment.centerLeft,
-                child: new Text('Recent products!')),
+                child: new Text('Experienced Tutors!')),
           ),
           //grid view
           Flexible(child: Products()),

@@ -30,7 +30,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => new HomePage()));
             },
-            child: Text('Fashapp')),
+            child: Text('Find A Tutor For YOu')),
         actions: <Widget>[
           new IconButton(
               icon: Icon(
@@ -89,8 +89,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                         context: context,
                         builder: (context) {
                           return new AlertDialog(
-                            title: new Text("Size"),
-                            content: new Text("Choose the size"),
+                            title: new Text("Subject"),
+                            content: new Text("Choose the subject"),
                             actions: <Widget>[
                               new MaterialButton(
                                 onPressed: () {
@@ -107,7 +107,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   elevation: 0.2,
                   child: Row(
                     children: <Widget>[
-                      Expanded(child: new Text("Size")),
+                      Expanded(child: new Text("Subject")),
                       Expanded(child: new Icon(Icons.arrow_drop_down))
                     ],
                   ),
@@ -121,8 +121,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                         context: context,
                         builder: (context) {
                           return new AlertDialog(
-                            title: new Text("Colors"),
-                            content: new Text("Choose a color"),
+                            title: new Text("Setting"),
+                            content: new Text("In person or Virtual"),
                             actions: <Widget>[
                               new MaterialButton(
                                 onPressed: () {
@@ -139,7 +139,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   elevation: 0.2,
                   child: Row(
                     children: <Widget>[
-                      Expanded(child: new Text("Color")),
+                      Expanded(child: new Text("Setting")),
                       Expanded(child: new Icon(Icons.arrow_drop_down))
                     ],
                   ),
@@ -153,7 +153,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         builder: (context) {
                           return new AlertDialog(
                             title: new Text("Quantity"),
-                            content: new Text("Choose the quantity"),
+                            content: new Text("Choose the number of sessions quantity"),
                             actions: <Widget>[
                               new MaterialButton(
                                 onPressed: () {
@@ -188,7 +188,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     color: Colors.red,
                     textColor: Colors.white,
                     elevation: 0.2,
-                    child: new Text("Buy now")),
+                    child: new Text("Book")),
               ),
               new IconButton(
                   icon: Icon(Icons.add_shopping_cart, color: Colors.red),
@@ -201,7 +201,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
           Divider(),
           new ListTile(
-            title: new Text("Product details"),
+            title: new Text("Tutor details"),
             subtitle: new Text(
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
           ),
@@ -211,7 +211,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
                 child: new Text(
-                  "Product name",
+                  "Tutor's Name",
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
@@ -227,14 +227,14 @@ class _ProductDetailsState extends State<ProductDetails> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
                 child: new Text(
-                  "Product brand",
+                  "Tutor's Experience",
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
               //create product brand later!!
               Padding(
                 padding: EdgeInsets.all(5.0),
-                child: new Text("brand X"),
+                child: new Text("4 years"),
               )
             ],
           ),
@@ -244,20 +244,20 @@ class _ProductDetailsState extends State<ProductDetails> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
                 child: new Text(
-                  "Product condition",
+                  "Tutor's Rating",
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5.0),
-                child: new Text("NEW"),
+                child: new Text(".."),
               )
             ],
           ),
           Divider(),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: new Text("Similar products"),
+            child: new Text("Similar tutors"),
           ),
           //similar product section
           Container(
@@ -279,37 +279,37 @@ class _Similar_productsState extends State<Similar_products> {
   @override
   var product_list = [
     {
-      "name": "Blazer",
+      "name": "Ken",
       "picture": "assets/images/c2.jpg",
       "old_price": 120,
       "price": 85,
     },
     {
-      "name": "Red Dress",
+      "name": "Kelly",
       "picture": "assets/images/c2.jpg",
       "old_price": 100,
       "price": 50,
     },
     {
-      "name": "Red Dress",
+      "name": "Amber",
       "picture": "assets/images/c3.jpg",
       "old_price": 100,
       "price": 50,
     },
     {
-      "name": "Red Dress",
+      "name": "Jamar",
       "picture": "assets/images/c3.jpg",
       "old_price": 100,
       "price": 50,
     },
     {
-      "name": "Red Dress",
+      "name": "Donald",
       "picture": "assets/images/c3.jpg",
       "old_price": 100,
       "price": 50,
     },
     {
-      "name": "Red Dress",
+      "name": "Simone",
       "picture": "assets/images/c3.jpg",
       "old_price": 100,
       "price": 50,

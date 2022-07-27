@@ -11,40 +11,40 @@ class Products extends StatefulWidget {
 class _ProductsState extends State<Products> {
   var product_list = [
     {
-      "name": "Blazer",
-      "picture": "assets/images/c2.jpg",
+      "name": "Paulina",
+      "picture": "assets/images/c7.jpg",
       "old_price": 120,
-      "price": 85,
+      "price": 40,
     },
     {
-      "name": "Red Dress",
-      "picture": "assets/images/c2.jpg",
+      "name": "Kim",
+      "picture": "assets/images/c8.jpg",
       "old_price": 100,
       "price": 50,
     },
     {
-      "name": "Red Dress",
+      "name": "Jamar",
+      "picture": "assets/images/c3.jpg",
+      "old_price": 100,
+      "price": 45,
+    },
+    {
+      "name": "Ken",
       "picture": "assets/images/c3.jpg",
       "old_price": 100,
       "price": 50,
     },
     {
-      "name": "Red Dress",
+      "name": "Aliayah",
       "picture": "assets/images/c3.jpg",
       "old_price": 100,
       "price": 50,
     },
     {
-      "name": "Red Dress",
+      "name": "Linda",
       "picture": "assets/images/c3.jpg",
       "old_price": 100,
-      "price": 50,
-    },
-    {
-      "name": "Red Dress",
-      "picture": "assets/images/c3.jpg",
-      "old_price": 100,
-      "price": 50,
+      "price": 60,
     }
   ];
   @override
