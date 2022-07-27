@@ -6,6 +6,7 @@ import 'package:flutter_booking_app/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_booking_app/pages/home.dart';
 import 'package:flutter_booking_app/utils/color_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_booking_app/AuthenticationService/AuthenticationService.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
@@ -25,12 +27,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+
         title: const Text(
           "Sign Up",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
       body: Container(
+          key: _key,
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
@@ -69,6 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           password: _passwordTextController.text)
                       .then((value) {
                     print("Created New Account");
+                    
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HomePage()));
                   }).onError((error, stackTrace) {
@@ -81,3 +86,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
+
