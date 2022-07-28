@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_booking_app/pages/product_detail.dart';
 
 class Products extends StatefulWidget {
-   const Products({Key? key}) : super(key: key);
+  const Products({Key? key}) : super(key: key);
 
   @override
   State<Products> createState() => _ProductsState();
@@ -12,37 +12,37 @@ class _ProductsState extends State<Products> {
   var product_list = [
     {
       "name": "Paulina",
-      "picture": "assets/images/c7.jpg",
+      "picture": "assets/images/c3.png",
       "old_price": 120,
       "price": 40,
     },
     {
       "name": "Kim",
-      "picture": "assets/images/c8.jpg",
+      "picture": "assets/images/c8.png",
       "old_price": 100,
       "price": 50,
     },
     {
       "name": "Jamar",
-      "picture": "assets/images/c3.jpg",
+      "picture": "assets/images/c3.png",
       "old_price": 100,
       "price": 45,
     },
     {
       "name": "Ken",
-      "picture": "assets/images/c3.jpg",
+      "picture": "assets/images/c3.png",
       "old_price": 100,
       "price": 50,
     },
     {
       "name": "Aliayah",
-      "picture": "assets/images/c3.jpg",
+      "picture": "assets/images/c3.png",
       "old_price": 100,
       "price": 50,
     },
     {
       "name": "Linda",
-      "picture": "assets/images/c3.jpg",
+      "picture": "assets/images/c3.png",
       "old_price": 100,
       "price": 60,
     }

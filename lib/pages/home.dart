@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_booking_app/components/horizontalListView.dart';
 import 'package:flutter_booking_app/components/products.dart';
 import 'package:flutter_booking_app/pages/cart.dart';
+import 'package:flutter_booking_app/pages/profile.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +17,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? name;
+  String? email;
+
+  getCurrentUser() {
+    // Fireabse Auth - get Authenticated User - UserID
+    String? userID;
+    if (FirebaseAuth.instance.currentUser != null) {
+      userID = FirebaseAuth.instance.currentUser?.uid;
+    }
+
+    // Firestore - Get User Info using UserID
+    final db = FirebaseFirestore.instance;
+    final docRef = db.collection("users").doc(userID);
+    docRef.get().then(
+      (DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        // ...
+        name = data["name"];
+        email = data["email"];
+        print('name - $name');
+        setState(() {});
+      },
+      onError: (e) => print("Error getting document: $e"),
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget image_carousel = new Container(
@@ -43,14 +79,14 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(
               Icons.logout,
               color: Colors.white,
-              ),
-              onPressed: (){
-                FirebaseAuth.instance.signOut().then((value) {
-              print("Signed Out");
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignInScreen()));
-            });
-              },
+            ),
+            onPressed: () {
+              FirebaseAuth.instance.signOut().then((value) {
+                print("Signed Out");
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignInScreen()));
+              });
+            },
           ),
           new IconButton(
               icon: Icon(
@@ -73,15 +109,14 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => new Cart()));
               }),
-          
         ],
       ),
       drawer: new Drawer(
         child: new ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: Text('Angie'),
-              accountEmail: Text('angie@gmail.com'),
+              accountName: Text(name ?? ''),
+              accountEmail: Text(email ?? ''),
               currentAccountPicture: GestureDetector(
                 child: new CircleAvatar(
                   backgroundColor: Colors.grey,
@@ -104,9 +139,12 @@ class _HomePageState extends State<HomePage> {
             ),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => new Profile()));
+              },
               child: ListTile(
-                title: Text('My account'),
+                title: Text('Profile'),
                 leading: Icon(Icons.person, color: Colors.red),
               ),
             ),
@@ -174,9 +212,8 @@ class _HomePageState extends State<HomePage> {
           //padding widget
           new Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Container(
-                alignment: Alignment.centerLeft,
-                child: new Text('')),
+            child:
+                Container(alignment: Alignment.centerLeft, child: new Text('')),
           ),
 
           //Horizontal list view begins here

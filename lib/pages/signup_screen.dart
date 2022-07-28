@@ -1,12 +1,11 @@
-
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_booking_app/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_booking_app/pages/home.dart';
 import 'package:flutter_booking_app/utils/color_utils.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -16,10 +15,23 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
+
+  void _createUser(String userId, String name, String email) {
+    final user = <String, String>{
+      "name": name,
+      "email": email,
+    };
+    final db = FirebaseFirestore.instance;
+    db
+        .collection("users")
+        .doc(userId)
+        .set(user)
+        .onError((e, _) => print("Error writing document: $e"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +39,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-
         title: const Text(
           "Sign Up",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -50,8 +61,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                reusableTextField("Enter Full Name", Icons.person_outline, false,
-                    _userNameTextController),
+                reusableTextField("Enter First Name", Icons.person_outline,
+                    false, _userNameTextController),
                 const SizedBox(
                   height: 20,
                 ),
@@ -70,9 +81,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       .createUserWithEmailAndPassword(
                           email: _emailTextController.text,
                           password: _passwordTextController.text)
-                      .then((value) {
+                      .then((userCredential) {
                     print("Created New Account");
-                    
+                    _createUser(
+                        userCredential.user!.uid,
+                        _userNameTextController.text,
+                        _emailTextController.text);
+
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HomePage()));
                   }).onError((error, stackTrace) {
@@ -85,4 +100,3 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
-
