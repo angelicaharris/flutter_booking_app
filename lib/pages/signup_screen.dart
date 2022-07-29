@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_booking_app/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_booking_app/pages/home.dart';
+import 'package:flutter_booking_app/pages/signup_screen.dart';
 import 'package:flutter_booking_app/utils/color_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_booking_app/widgets/my_radio_button.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -18,6 +20,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
+  //Radio Button Variable
+  UserTypeEnum? _UserTypeEnum;
 
   void _createUser(String userId, String name, String email) {
     final user = <String, String>{
@@ -66,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                reusableTextField("Enter Email Id", Icons.person_outline, false,
+                reusableTextField("Enter Email", Icons.person_outline, false,
                     _emailTextController),
                 const SizedBox(
                   height: 20,
@@ -75,6 +79,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _passwordTextController),
                 const SizedBox(
                   height: 20,
+                ),
+                Row(
+                  children: [
+                    MyRadioButton(
+                      title: UserTypeEnum.Student.name,
+                      value: UserTypeEnum.Student,
+                      selectedUserType: _UserTypeEnum,
+                      onChanged: (val) {
+                        setState(() {
+                          _UserTypeEnum = val;
+                        });
+                      },
+                    ),
+                    SizedBox(
+                      width: 5.0,
+                    ),
+                    MyRadioButton(
+                        title: UserTypeEnum.Tutor.name,
+                        value: UserTypeEnum.Tutor,
+                        selectedUserType: _UserTypeEnum,
+                        onChanged: (val) {
+                          setState(() {
+                            _UserTypeEnum = val;
+                          });
+                        }),
+                  ],
                 ),
                 firebaseUIButton(context, "Sign Up", () {
                   FirebaseAuth.instance
