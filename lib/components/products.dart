@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_booking_app/pages/product_detail.dart';
 
 class Products extends StatefulWidget {
-  const Products({Key? key}) : super(key: key);
-
+  const Products({Key? key, this.usersSnap}) : super(key: key);
+  final QuerySnapshot? usersSnap;
   @override
   State<Products> createState() => _ProductsState();
 }
@@ -49,18 +50,21 @@ class _ProductsState extends State<Products> {
   ];
   @override
   Widget build(BuildContext context) {
+    final data = widget.usersSnap;
+    if (data == null) return CircularProgressIndicator();
     return GridView.builder(
-        itemCount: product_list.length,
+        itemCount: data.docs.length,
         gridDelegate:
             new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
+          final doc = data.docs[index];
           return Padding(
             padding: const EdgeInsets.all(4.0),
             child: Single_prod(
-              prod_name: product_list[index]['name'],
-              prod_picture: product_list[index]['picture'],
-              prod_old_price: product_list[index]['old_price'],
-              prod_price: product_list[index]['price'],
+              prod_name: doc['name'],
+              prod_picture: 'assets/images/c3.png',
+              prod_old_price: '50',
+              prod_price: '50',
             ),
           );
         });

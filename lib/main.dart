@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_booking_app/pages/home.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter_booking_app/admin/screens/admin.dart';
@@ -7,11 +9,15 @@ import 'package:flutter_booking_app/admin/screens/admin.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  // get current user
+  final User? user = FirebaseAuth.instance.currentUser;
+  print('main - user - ${user?.uid}');
+  runApp(MyApp(user: user));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, this.user}) : super(key: key);
+  final User? user;
 
   // This widget is the root of your application.
   @override
@@ -32,15 +38,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: Admin(),
-      home: SignInScreen(),
+      home: user != null ? HomePage() : SignInScreen(),
     );
   }
 }
-
-
-
-
-
 
 /*
 void main() {
@@ -51,7 +52,6 @@ void main() {
 }
 
 */
-
 
 /*
 import 'package:firebase_core/firebase_core.dart';

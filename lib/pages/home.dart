@@ -43,11 +43,29 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  QuerySnapshot? usersSnap;
+
+  getUsers() {
+    //get either tutors or students
+    final db = FirebaseFirestore.instance;
+    db.collection("users").where('userType', isEqualTo: 'Student').get().then(
+      (res) {
+        print("Successfully completed");
+        // parse data to our model
+        usersSnap = res;
+        // update ui
+        setState(() {});
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCurrentUser();
+    getUsers();
   }
 
   @override
@@ -73,7 +91,7 @@ class _HomePageState extends State<HomePage> {
       appBar: new AppBar(
         elevation: 0.1,
         backgroundColor: Colors.red,
-        title: Text('Find A Tutor Right for You'),
+        title: Text('TutorMatch'),
         actions: <Widget>[
           new IconButton(
             icon: Icon(
@@ -225,7 +243,10 @@ class _HomePageState extends State<HomePage> {
                 child: new Text('Experienced Tutors!')),
           ),
           //grid view
-          Flexible(child: Products()),
+          Flexible(
+              child: Products(
+            usersSnap: usersSnap,
+          )),
         ],
       ),
     );

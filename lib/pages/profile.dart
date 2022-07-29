@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_booking_app/pages/home.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -14,6 +15,8 @@ class Profile extends StatefulWidget {
 class _MyWidgetState extends State<Profile> {
   String? name;
   String? email;
+  String? oldPassword;
+  String? newPassword;
 
   getCurrentUser() {
     // Fireabse Auth - get Authenticated User - UserID
@@ -32,16 +35,17 @@ class _MyWidgetState extends State<Profile> {
         name = data["name"];
         email = data["email"];
         print('name - $name');
-        // _nameCotroller.text = name ?? '';
-        // _emailController.text = email ?? '';
+        setState(() {});
+        _nameCotroller.text = name ?? '';
+        _emailController.text = email ?? '';
       },
       onError: (e) => print("Error getting document: $e"),
     );
   }
 
   final _nameCotroller = TextEditingController();
-  final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -50,13 +54,23 @@ class _MyWidgetState extends State<Profile> {
     getCurrentUser();
   }
 
-  void _save() {
-    String? userID;
-    if (FirebaseAuth.instance.currentUser != null) {
-      userID = FirebaseAuth.instance.currentUser?.uid;
+  void _save() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print('No user found');
+      return;
     }
+    String userID = user.uid;
     // Update one field, creating the document if it does not already exist.
-    final data = {"name": _nameCotroller.text};
+    final data = {"name": _nameCotroller.text, "email": _emailController.text};
+
+    await user.updateEmail(_emailController.text);
+
+    final pwd = _passwordController.text;
+    if (pwd.isNotEmpty) {
+      await user.updatePassword(pwd);
+    }
+
     final db = FirebaseFirestore.instance;
     db.collection("users").doc(userID).set(data, SetOptions(merge: true));
   }
@@ -75,14 +89,25 @@ class _MyWidgetState extends State<Profile> {
           TextFormField(
             controller: _nameCotroller,
             decoration:
-                InputDecoration(labelText: 'Your Name', hintText: 'Jignesh'),
+                InputDecoration(labelText: 'Your Name', hintText: 'e.g. John'),
           ),
           TextFormField(
-            initialValue: 'Your email',
+            controller: _emailController,
+            decoration: InputDecoration(
+                labelText: 'Your Email', hintText: 'e.g. John@gmail.com'),
           ),
           TextFormField(
-            initialValue: 'Your password',
+            controller: _passwordController,
+            decoration: InputDecoration(
+              hintText: "New Password",
+            ),
           ),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage()));
+              },
+              child: Text('Cancel')),
           ElevatedButton(
               onPressed: () {
                 _save();
