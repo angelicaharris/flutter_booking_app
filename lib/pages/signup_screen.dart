@@ -20,15 +20,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
+  late String userType;
   //Radio Button Variable
   UserTypeEnum? _UserTypeEnum;
 
-  void _createUser(String userId, String name, String email) {
-    final user = <String, String>{
+  void _createUser(String userId, String name, String email, String userType) {
+    final db = FirebaseFirestore.instance;
+    final user = <String, dynamic>{
       "name": name,
       "email": email,
+      "userType": userType,
     };
-    final db = FirebaseFirestore.instance;
+
     db
         .collection("users")
         .doc(userId)
@@ -89,6 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onChanged: (val) {
                         setState(() {
                           _UserTypeEnum = val;
+                          userType = UserTypeEnum.Student.name;
                         });
                       },
                     ),
@@ -102,6 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onChanged: (val) {
                           setState(() {
                             _UserTypeEnum = val;
+                            userType = UserTypeEnum.Tutor.name;
                           });
                         }),
                   ],
@@ -116,7 +121,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _createUser(
                         userCredential.user!.uid,
                         _userNameTextController.text,
-                        _emailTextController.text);
+                        _emailTextController.text,
+                        userType);
 
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HomePage()));
