@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 //my imports
-import 'package:flutter_booking_app/components/cart_products.dart';
+//import 'package:flutter_booking_app/components/cart_Tutors.dart';
 
-class Cart_products extends StatefulWidget {
-  const Cart_products({Key? key}) : super(key: key);
+class Cart_Tutors extends StatefulWidget {
+  const Cart_Tutors({Key? key}) : super(key: key);
 
   @override
-  State<Cart_products> createState() => _Cart_productsState();
+  State<Cart_Tutors> createState() => _Cart_TutorsState();
 }
 
-class _Cart_productsState extends State<Cart_products> {
-  var Products_on_the_cart = [
+class _Cart_TutorsState extends State<Cart_Tutors> {
+  var Tutors_on_the_cart = [
     {
       "name": "James",
       "picture": "assets/images/c5.png",
@@ -33,15 +33,15 @@ class _Cart_productsState extends State<Cart_products> {
   @override
   Widget build(BuildContext context) {
     return new ListView.builder(
-      itemCount: Products_on_the_cart.length,
+      itemCount: Tutors_on_the_cart.length,
       itemBuilder: (context, index) {
         return Single_cart_product(
-            cart_prod_name: Products_on_the_cart[index]["name"],
-            cart_prod_color: Products_on_the_cart[index]["color"],
-            cart_prod_qty: Products_on_the_cart[index]["quantity"],
-            cart_prod_size: Products_on_the_cart[index]["size"],
-            cart_prod_price: Products_on_the_cart[index]["price"],
-            cart_prod_picture: Products_on_the_cart[index]["picture"]);
+            cart_prod_name: Tutors_on_the_cart[index]["name"],
+            cart_prod_color: Tutors_on_the_cart[index]["color"],
+            cart_prod_qty: Tutors_on_the_cart[index]["quantity"],
+            cart_prod_size: Tutors_on_the_cart[index]["size"],
+            cart_prod_price: Tutors_on_the_cart[index]["price"],
+            cart_prod_picture: Tutors_on_the_cart[index]["picture"]);
       },
     );
   }

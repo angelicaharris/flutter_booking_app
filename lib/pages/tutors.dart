@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_booking_app/pages/product_detail.dart';
 
-class Products extends StatefulWidget {
-  const Products({Key? key, this.usersSnap}) : super(key: key);
+//my own imports
+import 'package:flutter_booking_app/pages/tutor_details.dart';
+
+class Tutors extends StatefulWidget {
+  const Tutors({Key? key, this.usersSnap}) : super(key: key);
   final QuerySnapshot? usersSnap;
   @override
-  State<Products> createState() => _ProductsState();
+  State<Tutors> createState() => _TutorsState();
 }
 
-class _ProductsState extends State<Products> {
+class _TutorsState extends State<Tutors> {
   var product_list = [
     {
       "name": "Paulina",

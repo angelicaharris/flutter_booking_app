@@ -9,33 +9,13 @@ class HorizontalList extends StatelessWidget {
       height: 40.0,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: <Widget>[
-       /*   Category(
-            image_location: 'assets/images/c2.png',
-            image_caption: 'ACT English',
-          ),
-          Category(
-            image_location: 'assets/images/c2.png',
-            image_caption: 'ACT Math',
-          ),
-          Category(
-            image_location: 'assets/images/c2.png',
-            image_caption: 'ACT Reading',
-          ),
-          Category(
-            image_location: 'assets/images/c2.png',
-            image_caption: 'ACT Science',
-          ),
-          Category(
-            image_location: 'assets/images/c2.png',
-            image_caption: 'ACT Writing',
-          ),*/
-        ],
+        children: <Widget>[],
       ),
     );
   }
 }
 
+//<----side menu of home page --->
 class Category extends StatelessWidget {
   final String image_location;
   final String image_caption;

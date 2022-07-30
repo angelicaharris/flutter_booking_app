@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
+//my own imports
 import 'package:flutter_booking_app/pages/home.dart';
 
 class Profile extends StatefulWidget {
@@ -31,10 +31,8 @@ class _MyWidgetState extends State<Profile> {
     docRef.get().then(
       (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
-        // ...
         name = data["name"];
         email = data["email"];
-        print('name - $name');
         setState(() {});
         _nameCotroller.text = name ?? '';
         _emailController.text = email ?? '';
@@ -54,6 +52,7 @@ class _MyWidgetState extends State<Profile> {
     getCurrentUser();
   }
 
+//<---- after user makes update, save that info to firestore --->
   void _save() async {
     final User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {

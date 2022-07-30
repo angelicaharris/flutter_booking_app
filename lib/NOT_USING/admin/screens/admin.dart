@@ -21,8 +21,6 @@ class _AdminState extends State<Admin> {
   BrandService _brandService = BrandService();
   CategoryService _categoryService = CategoryService();
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +64,7 @@ class _AdminState extends State<Admin> {
         return Column(
           children: <Widget>[
             ListTile(
-            /*  subtitle: FlatButton.icon(
+              /*  subtitle: FlatButton.icon(
                 onPressed: null,
                icon: Icon(
                   Icons.attach_money,
@@ -118,7 +116,7 @@ class _AdminState extends State<Admin> {
                           )),
                     ),
                   ),
-              /*    Padding(
+                  /*    Padding(
                     padding: const EdgeInsets.all(22.0),
                     child: Card(
                       child: ListTile(
@@ -212,7 +210,7 @@ class _AdminState extends State<Admin> {
               title: Text("Edit Schedule"),
               onTap: () {},
             ),
-        /*    Divider(),
+            /*    Divider(),
             ListTile(
               leading: Icon(Icons.add_circle_outline),
               title: Text("Add brand"),
@@ -241,28 +239,29 @@ class _AdminState extends State<Admin> {
         key: _categoryFormKey,
         child: TextFormField(
           controller: categoryController,
-          validator: (String? value){
-            if(value!.isEmpty){
+          validator: (String? value) {
+            if (value!.isEmpty) {
               return 'category cannot be empty';
             }
           },
-          decoration: InputDecoration(
-            hintText: "add subject"
-          ),
+          decoration: InputDecoration(hintText: "add subject"),
         ),
       ),
       actions: <Widget>[
-        FlatButton(onPressed: (){
-          if(categoryController.text != null){
-            _categoryService.createCategory(categoryController.text);
-          }
-          Fluttertoast.showToast(msg: 'category created');
-          Navigator.pop(context);
-        }, child: Text('ADD')),
-        FlatButton(onPressed: (){
-          Navigator.pop(context);
-        }, child: Text('CANCEL')),
-
+        FlatButton(
+            onPressed: () {
+              if (categoryController.text != null) {
+                _categoryService.createCategory(categoryController.text);
+              }
+              Fluttertoast.showToast(msg: 'category created');
+              Navigator.pop(context);
+            },
+            child: Text('ADD')),
+        FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('CANCEL')),
       ],
     );
 
@@ -275,28 +274,29 @@ class _AdminState extends State<Admin> {
         key: _brandFormKey,
         child: TextFormField(
           controller: brandController,
-          validator: (String? value){
-            if(value!.isEmpty){
+          validator: (String? value) {
+            if (value!.isEmpty) {
               return 'category cannot be empty';
             }
           },
-          decoration: InputDecoration(
-              hintText: "add brand"
-          ),
+          decoration: InputDecoration(hintText: "add brand"),
         ),
       ),
       actions: <Widget>[
-        FlatButton(onPressed: (){
-          if(brandController.text != null){
-            _brandService.createBrand(brandController.text);
-          }
-          Fluttertoast.showToast(msg: 'brand added');
-          Navigator.pop(context);
-        }, child: Text('ADD')),
-        FlatButton(onPressed: (){
-          Navigator.pop(context);
-        }, child: Text('CANCEL')),
-
+        FlatButton(
+            onPressed: () {
+              if (brandController.text != null) {
+                _brandService.createBrand(brandController.text);
+              }
+              Fluttertoast.showToast(msg: 'brand added');
+              Navigator.pop(context);
+            },
+            child: Text('ADD')),
+        FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('CANCEL')),
       ],
     );
 
@@ -526,7 +526,7 @@ class _AdminState extends State<Admin> {
             Divider(),
             ListTile(
               leading: Icon(Icons.change_history),
-              title: Text("Products list"),
+              title: Text("Tutors list"),
               onTap: () {},
             ),
             Divider(),

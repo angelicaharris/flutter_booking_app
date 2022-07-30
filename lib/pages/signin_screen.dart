@@ -1,15 +1,12 @@
-
-
-
-
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_booking_app/reusable_widgets/reusable_widget.dart';
+import 'package:flutter/material.dart';
+
+//my own imports
+import 'package:flutter_booking_app/widgets/reusable_widget.dart';
 import 'package:flutter_booking_app/pages/home.dart';
 import 'package:flutter_booking_app/pages/reset_password.dart';
 import 'package:flutter_booking_app/pages/signup_screen.dart';
 import 'package:flutter_booking_app/utils/color_utils.dart';
-import 'package:flutter/material.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -19,6 +16,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  //variables to save user inputs
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   @override

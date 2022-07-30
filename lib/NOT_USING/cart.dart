@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_booking_app/components/cart_products.dart';
-
+//import 'package:flutter_booking_app/components/cart_Tutors.dart';
+/*
 class Cart extends StatefulWidget {
   const Cart({Key? key}) : super(key: key);
 
@@ -25,7 +25,7 @@ class _CartState extends State<Cart> {
               onPressed: () {}),
         ],
       ),
-      body: new Cart_products(),
+      body: new Cart_Tutors(),
       bottomNavigationBar: new Container(
         color: Colors.white,
         child: Row(children: <Widget>[
@@ -49,3 +49,4 @@ class _CartState extends State<Cart> {
     );
   }
 }
+*/

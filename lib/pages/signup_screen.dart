@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_booking_app/reusable_widgets/reusable_widget.dart';
-import 'package:flutter_booking_app/pages/home.dart';
-import 'package:flutter_booking_app/pages/signup_screen.dart';
-import 'package:flutter_booking_app/utils/color_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+
+//my own imports
+import 'package:flutter_booking_app/widgets/reusable_widget.dart';
+import 'package:flutter_booking_app/utils/color_utils.dart';
 import 'package:flutter_booking_app/widgets/my_radio_button.dart';
 import 'package:flutter_booking_app/pages/student_survey.dart';
 
@@ -112,6 +112,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }),
                   ],
                 ),
+                //<-----users inputs get checked in firestore and saved to firebase -->
                 firebaseUIButton(context, "Sign Up", () {
                   FirebaseAuth.instance
                       .createUserWithEmailAndPassword(

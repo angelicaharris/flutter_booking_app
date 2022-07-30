@@ -153,7 +153,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                         builder: (context) {
                           return new AlertDialog(
                             title: new Text("Quantity"),
-                            content: new Text("Choose the number of sessions quantity"),
+                            content: new Text(
+                                "Choose the number of sessions quantity"),
                             actions: <Widget>[
                               new MaterialButton(
                                 onPressed: () {
@@ -262,7 +263,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           //similar product section
           Container(
             height: 340.0,
-            child: Similar_products(),
+            child: Similar_Tutors(),
           )
         ],
       ),
@@ -270,12 +271,12 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 }
 
-class Similar_products extends StatefulWidget {
+class Similar_Tutors extends StatefulWidget {
   @override
-  State<Similar_products> createState() => _Similar_productsState();
+  State<Similar_Tutors> createState() => _Similar_TutorsState();
 }
 
-class _Similar_productsState extends State<Similar_products> {
+class _Similar_TutorsState extends State<Similar_Tutors> {
   @override
   var product_list = [
     {

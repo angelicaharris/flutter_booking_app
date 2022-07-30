@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
 
 //my own imports
-import 'package:flutter_booking_app/components/horizontalListView.dart';
-import 'package:flutter_booking_app/components/products.dart';
-import 'package:flutter_booking_app/pages/cart.dart';
+import 'package:flutter_booking_app/pages/horizontalListView.dart';
 import 'package:flutter_booking_app/pages/profile.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
+import 'package:flutter_booking_app/pages/tutors.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   String? name;
   String? email;
 
+// <--- Firebase get users from collection --->
   getCurrentUser() {
     // Fireabse Auth - get Authenticated User - UserID
     String? userID;
@@ -38,8 +37,6 @@ class _HomePageState extends State<HomePage> {
         name = data["name"];
         email = data["email"];
         String type = data["userType"];
-        print('name - $name');
-        print('userType - $type');
         getUsers(type);
         setState(() {});
       },
@@ -49,14 +46,10 @@ class _HomePageState extends State<HomePage> {
 
   QuerySnapshot? usersSnap;
 
+//<----- Firebase get type of user either tutor or student -->
+
   getUsers(String type) {
-    //get either tutors or students
-
-    //final db = FirebaseFirestore.instance;
     final db = FirebaseFirestore.instance;
-
-    print("here2");
-    print('userType1 - $type');
     if (type == 'Tutor') {
       db.collection("users").where('userType', isEqualTo: 'Student').get().then(
         (res) {
@@ -64,7 +57,6 @@ class _HomePageState extends State<HomePage> {
           // parse data to our model
           usersSnap = res;
           // update ui
-          print("here3");
           setState(() {});
         },
         onError: (e) => print("Error completing: $e"),
@@ -76,7 +68,6 @@ class _HomePageState extends State<HomePage> {
           // parse data to our model
           usersSnap = res;
           // update ui
-          print("here4");
           setState(() {});
         },
         onError: (e) => print("Error completing: $e"),
@@ -94,23 +85,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget image_carousel = new Container(
-      height: 200.0,
-      child: new Carousel(
-        boxFit: BoxFit.cover,
-        images: [
-          AssetImage('assets/images/c1.jpg'),
-          AssetImage('assets/images/c1.jpg'),
-          AssetImage('assets/images/c1.jpg'),
-        ],
-        autoplay: false,
-        //  animationCurve: Curves.fastOutSlowIn,
-        //  animationDuration: Duration(milliseconds: 1000),
-        dotSize: 4.0,
-        indicatorBgPadding: 2.0,
-        dotBgColor: Colors.transparent,
-      ),
-    );
     return Scaffold(
       appBar: new AppBar(
         elevation: 0.1,
@@ -132,31 +106,18 @@ class _HomePageState extends State<HomePage> {
           ),
           new IconButton(
               icon: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-              onPressed: null),
-          new IconButton(
-              icon: Icon(
                 Icons.chat,
                 color: Colors.white,
               ),
               onPressed: null),
-          new IconButton(
-              icon: Icon(
-                Icons.shopping_cart,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => new Cart()));
-              }),
         ],
       ),
+      //<--homepage side drop down menu -->
       drawer: new Drawer(
         child: new ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
+              //displays user's name and email
               accountName: Text(name ?? ''),
               accountEmail: Text(email ?? ''),
               currentAccountPicture: GestureDetector(
@@ -200,20 +161,6 @@ class _HomePageState extends State<HomePage> {
             ),
 
             InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => new Cart()));
-              },
-              child: ListTile(
-                title: Text('Purchases'),
-                leading: Icon(
-                  Icons.shopping_cart,
-                  color: Colors.red,
-                ),
-              ),
-            ),
-
-            InkWell(
               onTap: () {},
               child: ListTile(
                 title: Text('Past Lessons'),
@@ -246,6 +193,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: new Column(
+        //<------- Filtering Icons toggles for users ----->
         children: <Widget>[
           TextFormField(
             decoration: InputDecoration(
@@ -260,17 +208,10 @@ class _HomePageState extends State<HomePage> {
                 Container(alignment: Alignment.centerLeft, child: new Text('')),
           ),
 
-          //Horizontal list view begins here
+//<-----Horizontal list view begins here ----->
           HorizontalList(),
-          /*  new Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Container(
-                alignment: Alignment.centerLeft,
-                child: new Text('Experienced Tutors!')),
-          ),*/
-          //grid view
           Flexible(
-              child: Products(
+              child: Tutors(
             usersSnap: usersSnap,
           )),
         ],

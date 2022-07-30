@@ -1,10 +1,9 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_booking_app/reusable_widgets/reusable_widget.dart';
-import 'package:flutter_booking_app/pages/home.dart';
-import 'package:flutter_booking_app/utils/color_utils.dart';
 import 'package:flutter/material.dart';
+
+//my own imports
+import 'package:flutter_booking_app/widgets/reusable_widget.dart';
+import 'package:flutter_booking_app/utils/color_utils.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({Key? key}) : super(key: key);
@@ -49,6 +48,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 const SizedBox(
                   height: 20,
                 ),
+                //<---- Email sent to user to reset password --->
                 firebaseUIButton(context, "Reset Password", () {
                   FirebaseAuth.instance
                       .sendPasswordResetEmail(email: _emailTextController.text)
