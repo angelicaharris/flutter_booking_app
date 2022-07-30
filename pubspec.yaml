@@ -52,6 +52,7 @@ dependencies:
   intl: ^0.17.0
   uuid: ^3.0.6
   firebase_database: ^9.0.20
+  flutter_scale_ruler: ^0.0.3
   
   #cupertino_icons: any
   #pinput: ^2.2.11

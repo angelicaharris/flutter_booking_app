@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
 
 //my own imports
 import 'package:flutter_booking_app/components/horizontalListView.dart';
@@ -36,7 +37,10 @@ class _HomePageState extends State<HomePage> {
         // ...
         name = data["name"];
         email = data["email"];
+        String type = data["userType"];
         print('name - $name');
+        print('userType - $type');
+        getUsers(type);
         setState(() {});
       },
       onError: (e) => print("Error getting document: $e"),
@@ -45,27 +49,47 @@ class _HomePageState extends State<HomePage> {
 
   QuerySnapshot? usersSnap;
 
-  getUsers() {
+  getUsers(String type) {
     //get either tutors or students
+
+    //final db = FirebaseFirestore.instance;
     final db = FirebaseFirestore.instance;
-    db.collection("users").where('userType', isEqualTo: 'Student').get().then(
-      (res) {
-        print("Successfully completed");
-        // parse data to our model
-        usersSnap = res;
-        // update ui
-        setState(() {});
-      },
-      onError: (e) => print("Error completing: $e"),
-    );
+
+    print("here2");
+    print('userType1 - $type');
+    if (type == 'Tutor') {
+      db.collection("users").where('userType', isEqualTo: 'Student').get().then(
+        (res) {
+          print("Successfully completed");
+          // parse data to our model
+          usersSnap = res;
+          // update ui
+          print("here3");
+          setState(() {});
+        },
+        onError: (e) => print("Error completing: $e"),
+      );
+    } else {
+      db.collection("users").where('userType', isEqualTo: 'Tutor').get().then(
+        (res) {
+          print("Successfully completed");
+          // parse data to our model
+          usersSnap = res;
+          // update ui
+          print("here4");
+          setState(() {});
+        },
+        onError: (e) => print("Error completing: $e"),
+      );
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getCurrentUser();
-    getUsers();
   }
 
   @override
@@ -223,11 +247,13 @@ class _HomePageState extends State<HomePage> {
       ),
       body: new Column(
         children: <Widget>[
-          //image carousel begins here
-
-          //  image_carousel,
-
-          //padding widget
+          TextFormField(
+            decoration: InputDecoration(
+              hintText: "Type Subject",
+            ),
+          ),
+          ElevatedButton(onPressed: () {}, child: Text('Search')),
+          Text("Filters"),
           new Padding(
             padding: const EdgeInsets.all(4.0),
             child:
@@ -236,12 +262,12 @@ class _HomePageState extends State<HomePage> {
 
           //Horizontal list view begins here
           HorizontalList(),
-          new Padding(
+          /*  new Padding(
             padding: const EdgeInsets.all(4.0),
             child: Container(
                 alignment: Alignment.centerLeft,
                 child: new Text('Experienced Tutors!')),
-          ),
+          ),*/
           //grid view
           Flexible(
               child: Products(

@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_booking_app/widgets/my_radio_button.dart';
+import 'package:flutter_booking_app/pages/student_survey.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -118,14 +119,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           password: _passwordTextController.text)
                       .then((userCredential) {
                     print("Created New Account");
-                    _createUser(
-                        userCredential.user!.uid,
-                        _userNameTextController.text,
-                        _emailTextController.text,
-                        userType);
+                    final userId = userCredential.user!.uid;
+                    _createUser(userId, _userNameTextController.text,
+                        _emailTextController.text, userType);
 
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                StudentSurvey(userId: userId)));
                   }).onError((error, stackTrace) {
                     print("Error ${error.toString()}");
                   });
