@@ -11,7 +11,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // get current user
-  final User? user = FirebaseAuth.instance.currentUser;
+  User? user = FirebaseAuth.instance.currentUser;
+  await user?.reload();
+  user = FirebaseAuth.instance.currentUser;
   print('main - user - ${user?.uid}');
   runApp(MyApp(user: user));
 }

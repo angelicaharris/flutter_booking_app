@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_booking_app/models/tutor.dart';
 
 //my own imports
 import 'package:flutter_booking_app/pages/tutor_details.dart';
@@ -60,31 +61,19 @@ class _TutorsState extends State<Tutors> {
             new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           final doc = data.docs[index];
+          final tutor = Tutor.fromDocument(doc);
           return Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Single_prod(
-              prod_name: doc['name'],
-              prod_picture: 'assets/images/c3.png',
-              prod_old_price: '50',
-              prod_price: '50',
-            ),
+            child: Single_prod(tutor: tutor),
           );
         });
   }
 }
 
 class Single_prod extends StatelessWidget {
-  final prod_name;
-  final prod_picture;
-  final prod_old_price;
-  final prod_price;
+  final Tutor tutor;
 
-  Single_prod({
-    this.prod_name,
-    this.prod_picture,
-    this.prod_old_price,
-    this.prod_price,
-  });
+  Single_prod({required this.tutor});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -95,10 +84,7 @@ class Single_prod extends StatelessWidget {
               onTap: () => Navigator.of(context).push(new MaterialPageRoute(
                   //here we are passing the values of the product to the product detail page
                   builder: (context) => new ProductDetails(
-                        product_detail_name: prod_name,
-                        product_detail_new_price: prod_price,
-                        product_detail_old_price: prod_old_price,
-                        product_detail_picture: prod_picture,
+                        tutor: tutor,
                       ))),
               child: GridTile(
                   footer: Container(
@@ -107,13 +93,13 @@ class Single_prod extends StatelessWidget {
                       children: <Widget>[
                         Expanded(
                           child: Text(
-                            prod_name,
+                            tutor.name,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16.0),
                           ),
                         ),
                         new Text(
-                          "\$${prod_price}",
+                          "\$${tutor.price}",
                           style: TextStyle(
                               color: Colors.red, fontWeight: FontWeight.bold),
                         )
@@ -121,7 +107,7 @@ class Single_prod extends StatelessWidget {
                     ),
                   ),
                   child: Image.asset(
-                    prod_picture,
+                    tutor.avatar,
                     fit: BoxFit.cover,
                   )),
             ),

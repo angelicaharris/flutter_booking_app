@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 //my own imports
 import 'package:flutter_booking_app/pages/home.dart';
+import 'package:flutter_booking_app/pages/tutor_booking_profile.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -18,9 +19,11 @@ class _MyWidgetState extends State<Profile> {
   String? oldPassword;
   String? newPassword;
 
+  String? userID;
+
   getCurrentUser() {
     // Fireabse Auth - get Authenticated User - UserID
-    String? userID;
+
     if (FirebaseAuth.instance.currentUser != null) {
       userID = FirebaseAuth.instance.currentUser?.uid;
     }
@@ -34,14 +37,14 @@ class _MyWidgetState extends State<Profile> {
         name = data["name"];
         email = data["email"];
         setState(() {});
-        _nameCotroller.text = name ?? '';
+        _nameController.text = name ?? '';
         _emailController.text = email ?? '';
       },
       onError: (e) => print("Error getting document: $e"),
     );
   }
 
-  final _nameCotroller = TextEditingController();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -61,7 +64,7 @@ class _MyWidgetState extends State<Profile> {
     }
     String userID = user.uid;
     // Update one field, creating the document if it does not already exist.
-    final data = {"name": _nameCotroller.text, "email": _emailController.text};
+    final data = {"name": _nameController.text, "email": _emailController.text};
 
     await user.updateEmail(_emailController.text);
 
@@ -86,7 +89,7 @@ class _MyWidgetState extends State<Profile> {
       body: Column(
         children: [
           TextFormField(
-            controller: _nameCotroller,
+            controller: _nameController,
             decoration:
                 InputDecoration(labelText: 'Your Name', hintText: 'e.g. John'),
           ),
@@ -111,7 +114,22 @@ class _MyWidgetState extends State<Profile> {
               onPressed: () {
                 _save();
               },
-              child: Text('Save'))
+              child: Text('Save')),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            TutorBookingProfile(userId: userID!)));
+              },
+              child: Text('Edit Profile')),
+          /*  ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignIn()));
+              },
+              child: Text('Delete Account')),*/
         ],
       ),
     );
