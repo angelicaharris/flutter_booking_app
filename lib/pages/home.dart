@@ -83,6 +83,8 @@ class _HomePageState extends State<HomePage> {
     getCurrentUser();
   }
 
+//<----- toggle button declaration for  ---->
+  List<bool> _isSelected = [true, false];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -200,12 +202,44 @@ class _HomePageState extends State<HomePage> {
               hintText: "Type Subject",
             ),
           ),
-          ElevatedButton(onPressed: () {}, child: Text('Search')),
-          Text("Filters"),
-          new Padding(
-            padding: const EdgeInsets.all(4.0),
-            child:
-                Container(alignment: Alignment.centerLeft, child: new Text('')),
+          SizedBox(height: 10),
+          new Row(
+            children: <Widget>[
+              ToggleButtons(
+                isSelected: _isSelected,
+                selectedColor: Colors.white,
+                color: Colors.black,
+                fillColor: Colors.lightBlue.shade900,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Text("Online", style: TextStyle(fontSize: 18)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Text("In-person", style: TextStyle(fontSize: 18)),
+                  ),
+                ],
+                onPressed: (int newIndex) {
+                  setState(() {
+                    for (int index = 0; index < _isSelected.length; index++) {
+                      if (index == newIndex) {
+                        _isSelected[index] = true;
+                      } else {
+                        _isSelected[index] = false;
+                      }
+                    }
+                  });
+                },
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(onPressed: () {}, child: Text('Search')),
+            ],
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text("X # Tutors", style: TextStyle(fontSize: 18)),
           ),
 
 //<-----Horizontal list view begins here ----->
