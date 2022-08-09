@@ -53,6 +53,10 @@ dependencies:
   uuid: ^3.0.6
   firebase_database: ^9.0.20
   flutter_scale_ruler: ^0.0.3
+ # flutter_auth_ui: ^3.0.0
+  flutter_riverpod: ^1.0.4
+  #firebase_auth_ui: ^1.0.1
+  page_transition: ^2.0.9
   
   #cupertino_icons: any
   #pinput: ^2.2.11

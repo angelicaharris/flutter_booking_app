@@ -73,7 +73,9 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation platform('com.google.firebase:firebase-bom:30.3.1')
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:multidex:1.0.3' //commented this out and replaced with below
+    //implementation 'androidx.multidex:multidex:2.0.1' //added
+    //implementation 'com.firebaseui:firebase-ui-auth:7.1.1' //added
     //didn't include analytics
    
 }

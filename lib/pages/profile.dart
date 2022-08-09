@@ -139,7 +139,7 @@ class _MyWidgetState extends State<Profile> {
 
       if (step2) {
         //delete user
-        user!.delete();
+        user.delete();
         step2 = false;
         step3 = true;
       }

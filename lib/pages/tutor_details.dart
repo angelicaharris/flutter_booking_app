@@ -1,22 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_booking_app/main.dart';
 import 'package:flutter_booking_app/models/tutor.dart';
+import 'package:flutter_booking_app/pages/booking_dialog.dart';
 import 'package:flutter_booking_app/pages/home.dart';
+import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 
 class ProductDetails extends StatefulWidget {
   final Tutor tutor;
+  final tutoDetailViewModel = TutorDetailsViewModel();
 
   ProductDetails({required this.tutor});
 
   @override
-  State<ProductDetails> createState() => _ProductDetailsState();
+  State<ProductDetails> createState() => ProductDetailsState();
 }
 
-class _ProductDetailsState extends State<ProductDetails> {
+class ProductDetailsState extends State<ProductDetails> {
+  @override
+  void initState() {
+    final bookNow = widget.tutoDetailViewModel.bookNow;
+    bookNow.listen((event) {
+      if (event.isEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Booking tutor...")));
+        return;
+      }
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(event)));
+    }, onError: (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.toString())));
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
+      appBar: AppBar(
         elevation: 0.1,
         backgroundColor: Colors.red,
         title: InkWell(
@@ -26,7 +47,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             },
             child: Text('Find A Tutor For YOu')),
         actions: <Widget>[
-          new IconButton(
+          IconButton(
               icon: Icon(
                 Icons.search,
                 color: Colors.white,
@@ -179,7 +200,16 @@ class _ProductDetailsState extends State<ProductDetails> {
             children: <Widget>[
               Expanded(
                 child: MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text("Request a Lesson"),
+                              content: BookingDialog(),
+                            );
+                          });
+                    },
                     color: Colors.red,
                     textColor: Colors.white,
                     elevation: 0.2,
