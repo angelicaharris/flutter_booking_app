@@ -64,7 +64,7 @@ class _TutorsState extends State<Tutors> {
           final tutor = Tutor.fromDocument(doc);
           return Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Single_prod(tutor: tutor),
+            child: Single_prod(tutorId: doc.id, tutor: tutor),
           );
         });
   }
@@ -72,8 +72,9 @@ class _TutorsState extends State<Tutors> {
 
 class Single_prod extends StatelessWidget {
   final Tutor tutor;
+  final String tutorId;
 
-  Single_prod({required this.tutor});
+  Single_prod({required this.tutorId, required this.tutor});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -83,8 +84,9 @@ class Single_prod extends StatelessWidget {
             child: InkWell(
               onTap: () => Navigator.of(context).push(new MaterialPageRoute(
                   //here we are passing the values of the product to the product detail page
-                  builder: (context) => new ProductDetails(
+                  builder: (context) => ProductDetails(
                         tutor: tutor,
+                        tutorId: tutorId,
                       ))),
               child: GridTile(
                   footer: Container(

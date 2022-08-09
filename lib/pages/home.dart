@@ -9,6 +9,7 @@ import 'package:flutter_booking_app/pages/horizontalListView.dart';
 import 'package:flutter_booking_app/pages/profile.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
 import 'package:flutter_booking_app/pages/tutors.dart';
+import 'package:flutter_booking_app/pages/upcoming_lessons.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -53,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     if (type == 'Tutor') {
       db.collection("users").where('userType', isEqualTo: 'Student').get().then(
         (res) {
-          print("Successfully completed");
+          print("Successfully completed => $res}");
           // parse data to our model
           usersSnap = res;
           // update ui
@@ -64,9 +65,8 @@ class _HomePageState extends State<HomePage> {
     } else {
       db.collection("users").where('userType', isEqualTo: 'Tutor').get().then(
         (res) {
-          print("Successfully completed");
           // parse data to our model
-          usersSnap = res;
+          usersSnap = res; // @
           // update ui
           setState(() {});
         },
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
           ),
           new IconButton(
               icon: Icon(
-                Icons.chat,
+                Icons.notifications,
                 color: Colors.white,
               ),
               onPressed: null),
@@ -155,9 +155,14 @@ class _HomePageState extends State<HomePage> {
             ),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => new UpCominngLessons()));
+              },
               child: ListTile(
-                title: Text('My Lessons'),
+                title: Text('Upcoming Lessons'),
                 leading: Icon(Icons.shopping_basket, color: Colors.red),
               ),
             ),

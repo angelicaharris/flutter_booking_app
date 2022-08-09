@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_booking_app/pages/tutor_booking.dart';
 import 'package:flutter_booking_app/pages/tutor_details.dart';
+import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 import 'package:intl/intl.dart';
 
 class BookingDialog extends StatefulWidget {
   String restorationId = "";
-  BookingDialog({Key? key, this.restorationId = ""}) : super(key: key);
+  final String tutorId;
+  late TutorDetailsViewModel tutorDetailsViewModel = TutorDetailsViewModel();
+  BookingDialog({Key? key, required this.tutorId, this.restorationId = ""})
+      : super(key: key);
 
   @override
   _BookingDialog createState() {
@@ -13,7 +18,7 @@ class BookingDialog extends StatefulWidget {
 }
 
 class _BookingDialog extends State<BookingDialog> with RestorationMixin {
-  String startTimeValue = "1";
+  String startTimeHour = "1";
   String startTimeValueMins = "00";
   String startTimeValueT = "PM";
   String durationValues = "30 mins";
@@ -24,6 +29,26 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
     "InPerson": "In Person",
     "online": "Online Lesson"
   };
+
+  String _lessonType = "InPerson";
+
+  @override
+  void initState() {
+    widget.tutorDetailsViewModel.bookNow.listen((event) {
+      if (event.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Submitting a request")));
+        return;
+      }
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Request submitted!")));
+      Navigator.of(context).pop();
+    }, onError: (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("$error")));
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +83,28 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
               height: 50,
             ),
             FloatingActionButton.extended(
-              onPressed: () {},
+              onPressed: () {
+                if (selectedDate == null ||
+                    startDate.isEmpty ||
+                    startTimeValueMins.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Some fields are missing")));
+                  return;
+                }
+                final year = selectedDate?.year.toInt();
+                final month = selectedDate?.month.toInt();
+                final day = selectedDate?.day.toInt();
+                final hour = int.tryParse(startTimeHour);
+                final mins = int.tryParse(startTimeValueMins);
+
+                final startTimeInMillis =
+                    DateTime(year!, month!, day!, hour!, mins!)
+                        .millisecondsSinceEpoch;
+                widget.tutorDetailsViewModel.bookTutor(
+                    tutorId: widget.tutorId,
+                    bookingRequest: TutorBooking(null, null, null,
+                        startTimeInMillis, durationValues, _lessonType));
+              },
               icon: const Icon(Icons.send),
               label: const Text('Send Request'),
               backgroundColor: Colors.pink,
@@ -107,19 +153,26 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
         ),
         Row(
           children: [
-            buildDropDown(
-                List.generate(10, (index) => "$index"), startTimeValue),
+            buildDropDown(List.generate(10, (index) => "$index"), startTimeHour,
+                (value) {
+              startTimeHour = value ?? "";
+            }),
             buildDropDown(
                 List.generate(10, (index) => index > 9 ? "$index" : "0$index"),
-                startTimeValueMins),
-            buildDropDown(["AM", "PM"], startTimeValueT),
+                startTimeValueMins, (value) {
+              startTimeValueMins = value ?? "";
+            }),
+            buildDropDown(["AM", "PM"], startTimeValueT, (value) {
+              startTimeValueT = value ?? "";
+            }),
           ],
         )
       ],
     );
   }
 
-  Widget buildDropDown(List<String> items, String? dropdownValue) {
+  Widget buildDropDown(
+      List<String> items, String? dropdownValue, Function(String?) onSelect) {
     return DropdownButton<String?>(
         value: dropdownValue,
         items: items
@@ -130,32 +183,52 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
             .toList(),
         onChanged: (value) {
           setState(() {
-            dropdownValue = value;
+            onSelect.call(value);
           });
         });
   }
 
   Widget _buildDuration() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text(
           "Duration",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        buildDropDown(["30 mins", "45 mins", "1 hr"], durationValues)
+        buildDropDown(["30 mins", "45 mins", "1 hr"], durationValues, (value) {
+          durationValues = value ?? "";
+        })
       ],
     );
   }
 
   Widget _buildLessonType() {
     return Column(
-      children: _lessonTypeMap.keys
-          .map((e) => RadioListTile<String>(
-              value: _lessonTypeMap[e] ?? "",
-              title: Text(_lessonTypeMap[e] ?? ""),
-              groupValue: _lessonTypeMap["online"],
-              onChanged: (value) {}))
-          .toList(),
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Text(
+          "Lesson Type",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Column(
+          children: _lessonTypeMap.keys
+              .map((e) => SizedBox(
+                    child: RadioListTile<String>(
+                        value: e,
+                        contentPadding: EdgeInsets.only(left: 0),
+                        title: Text(_lessonTypeMap[e] ?? ""),
+                        groupValue: _lessonType,
+                        onChanged: (value) {
+                          setState(() {
+                            _lessonType = value ?? "";
+                          });
+                          print("value : $value $e");
+                        }),
+                  ))
+              .toList(),
+        )
+      ],
     );
   }
 

@@ -8,8 +8,9 @@ import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 class ProductDetails extends StatefulWidget {
   final Tutor tutor;
   final tutoDetailViewModel = TutorDetailsViewModel();
+  final String tutorId;
 
-  ProductDetails({required this.tutor});
+  ProductDetails({required this.tutorId, required this.tutor});
 
   @override
   State<ProductDetails> createState() => ProductDetailsState();
@@ -45,7 +46,7 @@ class ProductDetailsState extends State<ProductDetails> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => new HomePage()));
             },
-            child: Text('Find A Tutor For YOu')),
+            child: Text('Book a Lesson')),
         actions: <Widget>[
           IconButton(
               icon: Icon(
@@ -206,7 +207,7 @@ class ProductDetailsState extends State<ProductDetails> {
                           builder: (context) {
                             return AlertDialog(
                               title: Text("Request a Lesson"),
-                              content: BookingDialog(),
+                              content: BookingDialog(tutorId: widget.tutorId),
                             );
                           });
                     },
@@ -347,17 +348,19 @@ class _Similar_TutorsState extends State<Similar_Tutors> {
         gridDelegate:
             new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
-          return Similar_single_prod(tutor: tutors[index]);
+          return Similar_single_prod(
+            tutor: tutors[index],
+            tutorId: "",
+          );
         });
   }
 }
 
 class Similar_single_prod extends StatelessWidget {
   final Tutor tutor;
+  final String tutorId;
 
-  Similar_single_prod({
-    required this.tutor,
-  });
+  Similar_single_prod({required this.tutor, required this.tutorId});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -367,8 +370,9 @@ class Similar_single_prod extends StatelessWidget {
             child: InkWell(
               onTap: () => Navigator.of(context).push(new MaterialPageRoute(
                   //here we are passing the values of the product to the product detail page
-                  builder: (context) => new ProductDetails(
+                  builder: (context) => ProductDetails(
                         tutor: tutor,
+                        tutorId: tutorId,
                       ))),
               child: GridTile(
                   footer: Container(
