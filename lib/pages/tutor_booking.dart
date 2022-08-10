@@ -18,7 +18,7 @@ class TutorBooking {
         json["startDateTime"],
         json["duration"],
         json['lessonType'],
-        json["subject"]);
+        json["subjectNames"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -29,7 +29,7 @@ class TutorBooking {
     json["startDateTime"] = startDateTime;
     json["duration"] = duration;
     json["lessonType"] = lessonType;
-    json["subject"] = subject;
+    json["subjectNames"] = subject;
     return json;
   }
 }

@@ -51,6 +51,11 @@ class _StudentSurveyState extends State<StudentSurvey> {
     });
 
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Subjects"),
+        automaticallyImplyLeading: false,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: options,

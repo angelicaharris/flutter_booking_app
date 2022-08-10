@@ -6,7 +6,7 @@ class ModelUpcomingLesson {
   final String duration;
   final String lessonType;
   final int date;
-  final List<String>? subjectNames;
+  final List<dynamic>? subjectNames;
 
   ModelUpcomingLesson(
       {this.name,

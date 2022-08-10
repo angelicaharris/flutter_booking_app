@@ -95,107 +95,6 @@ class ProductDetailsState extends State<ProductDetails> {
             ),
           ),
 
-          //the first buttons
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: MaterialButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return new AlertDialog(
-                            title: new Text("Subject"),
-                            content: new Text("Choose the subject"),
-                            actions: <Widget>[
-                              new MaterialButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(context);
-                                },
-                                child: new Text("close"),
-                              )
-                            ],
-                          );
-                        });
-                  },
-                  color: Colors.white,
-                  textColor: Colors.grey,
-                  elevation: 0.2,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: new Text("Subject")),
-                      Expanded(child: new Icon(Icons.arrow_drop_down))
-                    ],
-                  ),
-                ),
-              ),
-              //the color button
-              Expanded(
-                child: MaterialButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return new AlertDialog(
-                            title: new Text("Setting"),
-                            content: new Text("In person or Virtual"),
-                            actions: <Widget>[
-                              new MaterialButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(context);
-                                },
-                                child: new Text("close"),
-                              )
-                            ],
-                          );
-                        });
-                  },
-                  color: Colors.white,
-                  textColor: Colors.grey,
-                  elevation: 0.2,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: new Text("Setting")),
-                      Expanded(child: new Icon(Icons.arrow_drop_down))
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: MaterialButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return new AlertDialog(
-                            title: new Text("Quantity"),
-                            content: new Text(
-                                "Choose the number of sessions quantity"),
-                            actions: <Widget>[
-                              new MaterialButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(context);
-                                },
-                                child: new Text("close"),
-                              )
-                            ],
-                          );
-                        });
-                  },
-                  color: Colors.white,
-                  textColor: Colors.grey,
-                  elevation: 0.2,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: new Text("Qty")),
-                      Expanded(child: new Icon(Icons.arrow_drop_down)),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-
           //second button
           Row(
             children: <Widget>[
@@ -216,69 +115,14 @@ class ProductDetailsState extends State<ProductDetails> {
                     elevation: 0.2,
                     child: new Text("Book")),
               ),
-              new IconButton(
-                  icon: Icon(Icons.add_shopping_cart, color: Colors.red),
-                  onPressed: () {}),
-              new IconButton(
-                  icon: Icon(Icons.favorite_border),
-                  color: Colors.red,
-                  onPressed: () {}),
             ],
           ),
           Divider(),
           new ListTile(
-            title: new Text("Tutor details"),
+            title: new Text("Details"),
             subtitle: new Text(widget.tutor.bio),
           ),
-          Divider(),
-          new Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-                child: new Text(
-                  "Tutor's Name",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5.0),
-                child: new Text(widget.tutor.name),
-              )
-            ],
-          ),
 
-          new Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-                child: new Text(
-                  "Tutor's Experience",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              //create product brand later!!
-              Padding(
-                padding: EdgeInsets.all(5.0),
-                child: new Text("4 years"),
-              )
-            ],
-          ),
-//Add the product condition
-          new Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-                child: new Text(
-                  "Tutor's Rating",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5.0),
-                child: new Text(".."),
-              )
-            ],
-          ),
           Divider(),
           Padding(
             padding: const EdgeInsets.all(8.0),
