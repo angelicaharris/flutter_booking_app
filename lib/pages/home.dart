@@ -8,7 +8,7 @@ import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
 import 'package:flutter_booking_app/pages/horizontalListView.dart';
 import 'package:flutter_booking_app/pages/profile.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
-import 'package:flutter_booking_app/pages/tutors.dart';
+import 'package:flutter_booking_app/services/tutors.dart';
 import 'package:flutter_booking_app/pages/upcoming_lessons.dart';
 
 class HomePage extends StatefulWidget {

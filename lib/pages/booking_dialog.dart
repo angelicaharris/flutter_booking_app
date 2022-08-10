@@ -102,8 +102,14 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
                         .millisecondsSinceEpoch;
                 widget.tutorDetailsViewModel.bookTutor(
                     tutorId: widget.tutorId,
-                    bookingRequest: TutorBooking(null, null, null,
-                        startTimeInMillis, durationValues, _lessonType));
+                    bookingRequest: TutorBooking(
+                        null,
+                        null,
+                        null,
+                        startTimeInMillis,
+                        durationValues,
+                        _lessonType,
+                        ["Maths/Sample"]));
               },
               icon: const Icon(Icons.send),
               label: const Text('Send Request'),

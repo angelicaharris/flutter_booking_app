@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_booking_app/models/tutor.dart';
 
 //my own imports
 import 'package:flutter_booking_app/pages/tutor_details.dart';
+import 'package:flutter_booking_app/models/tutor.dart';
 
 class Tutors extends StatefulWidget {
   const Tutors({Key? key, this.usersSnap}) : super(key: key);
