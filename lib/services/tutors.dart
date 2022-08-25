@@ -13,57 +13,17 @@ class Tutors extends StatefulWidget {
 }
 
 class _TutorsState extends State<Tutors> {
-  var product_list = [
-    {
-      "name": "Paulina",
-      "picture": "assets/images/c3.png",
-      "old_price": 120,
-      "price": 40,
-    },
-    {
-      "name": "Kim",
-      "picture": "assets/images/c8.png",
-      "old_price": 100,
-      "price": 50,
-    },
-    {
-      "name": "Jamar",
-      "picture": "assets/images/c3.png",
-      "old_price": 100,
-      "price": 45,
-    },
-    {
-      "name": "Ken",
-      "picture": "assets/images/c3.png",
-      "old_price": 100,
-      "price": 50,
-    },
-    {
-      "name": "Aliayah",
-      "picture": "assets/images/c3.png",
-      "old_price": 100,
-      "price": 50,
-    },
-    {
-      "name": "Linda",
-      "picture": "assets/images/c3.png",
-      "old_price": 100,
-      "price": 60,
-    }
-  ];
   @override
   Widget build(BuildContext context) {
     final data = widget.usersSnap;
     if (data == null) return CircularProgressIndicator();
-    return GridView.builder(
+    return ListView.builder(
         itemCount: data.docs.length,
-        gridDelegate:
-            new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           final doc = data.docs[index];
           final tutor = Tutor.fromDocument(doc);
           return Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(.1),
             child: Single_prod(tutorId: doc.id, tutor: tutor),
           );
         });
@@ -77,9 +37,9 @@ class Single_prod extends StatelessWidget {
   Single_prod({required this.tutorId, required this.tutor});
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Hero(
-          tag: new Text("hero 1"),
+    return Container(
+        color: Colors.grey,
+        child: Card(
           child: Material(
             child: InkWell(
               onTap: () => Navigator.of(context).push(new MaterialPageRoute(
@@ -88,32 +48,49 @@ class Single_prod extends StatelessWidget {
                         tutor: tutor,
                         tutorId: tutorId,
                       ))),
-              child: GridTile(
-                  footer: Container(
-                    color: Colors.white,
-                    child: new Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            tutor.name,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16.0),
-                          ),
-                        ),
-                        new Text(
-                          "\$${tutor.price}",
-                          style: TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
+              /*  child: Row(
+                children: [
+                  CircleAvatar(
+                      radius: 40, backgroundImage: AssetImage(tutor.avatar)),
+                  Text(
+                    tutor.name,
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey),
                   ),
-                  child: Image.asset(
-                    tutor.avatar,
-                    fit: BoxFit.cover,
-                  )),
+                ],
+              ),*/
+
+              child: ListTile(
+                leading: CircleAvatar(
+                  radius: 40,
+                  backgroundImage: AssetImage(tutor.avatar),
+                ),
+                title: Text(
+                  tutor.name,
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
+                ),
+                subtitle: Text(
+                  tutor.bio,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
+                ),
+                trailing: Text(
+                  "\$${tutor.price}/hr",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
+                ),
+              ),
             ),
-          )),
-    );
+          ),
+        ));
   }
 }

@@ -1,15 +1,19 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
 
 //my own imports
-import 'package:flutter_booking_app/pages/horizontalListView.dart';
 import 'package:flutter_booking_app/pages/profile.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
 import 'package:flutter_booking_app/services/tutors.dart';
 import 'package:flutter_booking_app/pages/upcoming_lessons.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io' as io;
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,6 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String? name;
   String? email;
+  String? interests;
 
 // <--- Firebase get users from collection --->
   getCurrentUser() {
@@ -82,16 +87,42 @@ class _HomePageState extends State<HomePage> {
 
     getCurrentUser();
   }
+/*
+  Widget buildProfileImage(Function(String) onAction) async {
+    ImagePicker imgPicker = ImagePicker();
+    final XFile? imageSelected =
+        await imgPicker.pickImage(source: ImageSource.gallery);
+    final storage = FirebaseStorage.instance;
+    final storageRef = storage.ref("profile_images");
+   // storageRef.putData(io.File(imageSelected?.path), null);
+  }
+  */
 
+/*
+Stremamcontroller -> sink -> add()
+stream -> listen 
+*/
 //<----- toggle button declaration for  ---->
+
+  StreamController<String> _searchInterests = StreamController();
+  Stream<String> get searchInterests => _searchInterests.stream;
+
+  void search(String value) {}
+
   List<bool> _isSelected = [true, false];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
         elevation: 0.1,
-        backgroundColor: Colors.red,
-        title: Text('TutorMatch'),
+        backgroundColor: Colors.blue,
+        title: Card(
+          child: TextField(
+            decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search), hintText: 'Search...'),
+            onChanged: (val) {},
+          ),
+        ),
         actions: <Widget>[
           new IconButton(
             icon: Icon(
@@ -123,12 +154,21 @@ class _HomePageState extends State<HomePage> {
               accountName: Text(name ?? ''),
               accountEmail: Text(email ?? ''),
               currentAccountPicture: GestureDetector(
-                child: new CircleAvatar(
-                  backgroundColor: Colors.grey,
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
+                child: Stack(
+                  children: [
+                    new CircleAvatar(
+                      radius: 100,
+                      backgroundColor: Colors.grey,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Icon(Icons.edit),
+                    )
+                  ],
                 ),
               ),
               decoration: new BoxDecoration(color: Colors.red),
@@ -199,16 +239,54 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+
+      /*    body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (context, snapshots) {
+          return (snapshots.connectionState == ConnectionState.waiting)
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView.builder(
+                  itemCount: snapshots.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    var data = snapshots.data!.docs[index].data()
+                        as Map<String, dynamic>;
+
+                    if (name!.isEmpty) {
+                      return Flexible(
+                          child: Tutors(
+                        usersSnap: usersSnap,
+                      ));
+                    }
+                    if (data['name']
+                        .toString()
+                        .toLowerCase()
+                        .startsWith(name!.toLowerCase())) {
+                      return Flexible(
+                          child: Tutors(
+                        usersSnap: usersSnap,
+                      ));
+                    }
+                    return Container();
+                  });
+        },
+      ),*/
+
       body: new Column(
-        //<------- Filtering Icons toggles for users ----->
         children: <Widget>[
-          TextFormField(
-            decoration: InputDecoration(
-              hintText: "Type Subject",
-            ),
-          ),
-          SizedBox(height: 10),
-          new Row(
+//<-----Listing the users on homepage ----->
+          Flexible(
+              child: Tutors(
+            usersSnap: usersSnap,
+          )),
+        ],
+      ),
+    );
+  }
+}
+
+ /*  new Row(
             children: <Widget>[
               ToggleButtons(
                 isSelected: _isSelected,
@@ -218,11 +296,13 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text("Online", style: TextStyle(fontSize: 18)),
+                    child: Text("Online",
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text("In-person", style: TextStyle(fontSize: 18)),
+                    child: Text("In-person",
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
                   ),
                 ],
                 onPressed: (int newIndex) {
@@ -237,24 +317,5 @@ class _HomePageState extends State<HomePage> {
                   });
                 },
               ),
-              SizedBox(width: 10),
-              ElevatedButton(onPressed: () {}, child: Text('Search')),
             ],
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Text("X # Tutors", style: TextStyle(fontSize: 18)),
-          ),
-
-//<-----Horizontal list view begins here ----->
-          HorizontalList(),
-          Flexible(
-              child: Tutors(
-            usersSnap: usersSnap,
-          )),
-        ],
-      ),
-    );
-  }
-}
+          ),*/
