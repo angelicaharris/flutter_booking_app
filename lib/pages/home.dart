@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
 
 //my own imports
@@ -15,6 +16,8 @@ import 'package:flutter_booking_app/pages/upcoming_lessons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io' as io;
 
+import '../models/tutor.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -24,6 +27,8 @@ class _HomePageState extends State<HomePage> {
   String? name;
   String? email;
   String? interests;
+
+  List<Tutor>? tutors;
 
 // <--- Firebase get users from collection --->
   getCurrentUser() {
@@ -71,7 +76,10 @@ class _HomePageState extends State<HomePage> {
       db.collection("users").where('userType', isEqualTo: 'Tutor').get().then(
         (res) {
           // parse data to our model
-          usersSnap = res; // @
+          usersSnap = res; //
+
+          tutors =
+              usersSnap?.docs.map((doc) => Tutor.fromDocument(doc)).toList();
           // update ui
           setState(() {});
         },
@@ -104,8 +112,7 @@ stream -> listen
 */
 //<----- toggle button declaration for  ---->
 
-  StreamController<String> _searchInterests = StreamController();
-  Stream<String> get searchInterests => _searchInterests.stream;
+  final viewModel = TutorDetailsViewModel();
 
   void search(String value) {}
 
@@ -113,14 +120,22 @@ stream -> listen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
+      appBar: AppBar(
         elevation: 0.1,
         backgroundColor: Colors.blue,
         title: Card(
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.search), hintText: 'Search...'),
-            onChanged: (val) {},
+            onChanged: (val) {
+              if (tutors != null) {
+                tutors!.forEach((element) {
+                  final tutor = element as Tutor;
+                  final interests = tutor.interests.keys;
+                  interests.where((element) => element.startsWith(val));
+                });
+              }
+            },
           ),
         ),
         actions: <Widget>[
@@ -278,7 +293,7 @@ stream -> listen
 //<-----Listing the users on homepage ----->
           Flexible(
               child: Tutors(
-            usersSnap: usersSnap,
+            usersSnap: tutors,
           )),
         ],
       ),
