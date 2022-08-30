@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   String? interests;
 
   List<Tutor>? tutors;
+  List<Tutor>? originalTutors;
 
 // <--- Firebase get users from collection --->
   getCurrentUser() {
@@ -77,9 +78,9 @@ class _HomePageState extends State<HomePage> {
         (res) {
           // parse data to our model
           usersSnap = res; //
+          tutors = res.docs.map((doc) => Tutor.fromDocument(doc)).toList();
 
-          tutors =
-              usersSnap?.docs.map((doc) => Tutor.fromDocument(doc)).toList();
+          originalTutors = tutors;
           // update ui
           setState(() {});
         },
@@ -119,20 +120,59 @@ stream -> listen
   List<bool> _isSelected = [true, false];
   @override
   Widget build(BuildContext context) {
+    int? i;
+    int x = i ?? 0; //
     return Scaffold(
       appBar: AppBar(
         elevation: 0.1,
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 129, 143, 155),
         title: Card(
           child: TextField(
             decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.search), hintText: 'Search...'),
+            /*
+                  ? - nullable
+                  ! - non-nullable
+
+                  int? i; 
+                  int x =i;
+                */
             onChanged: (val) {
               if (tutors != null) {
-                tutors!.forEach((element) {
-                  final tutor = element as Tutor;
-                  final interests = tutor.interests.keys;
-                  interests.where((element) => element.startsWith(val));
+                List<Tutor>? tutorList;
+                setState(() {
+                  tutorList = originalTutors?.where((element) {
+                    print("search: $element");
+
+                    if (val.isEmpty) {
+                      tutorList = originalTutors;
+                      return true;
+                    }
+
+                    final tutor = element as Tutor;
+                    final interests = tutor.interests
+                        .keys; // {"Maths": true, "Discrete Maths": false}, m
+                    final interestMap = tutor
+                        .interests; // The interest booleans //interstMap['Maths'] == false -> False
+
+                    return interests.where((element) {
+                      //Iterates through the interests element and check which item starts  with @val
+                      // @param val - The textfield text
+                      if (interestMap[element] == true) {
+                        return element
+                            .toLowerCase() // "maths", discrete maths
+                            .startsWith(val
+                                .toLowerCase()); // wa --> maths; discrete maths
+
+                      } else {
+                        return false;
+                      }
+                    }).isNotEmpty;
+                  }).toList();
+
+                  tutors = tutorList;
+
+                  print("searchS: ${tutors?.length}");
                 });
               }
             },
@@ -293,7 +333,7 @@ stream -> listen
 //<-----Listing the users on homepage ----->
           Flexible(
               child: Tutors(
-            usersSnap: tutors,
+            tutorList: tutors,
           )),
         ],
       ),
@@ -301,7 +341,7 @@ stream -> listen
   }
 }
 
- /*  new Row(
+/*  new Row(
             children: <Widget>[
               ToggleButtons(
                 isSelected: _isSelected,

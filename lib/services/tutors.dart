@@ -6,8 +6,8 @@ import 'package:flutter_booking_app/pages/tutor_details.dart';
 import 'package:flutter_booking_app/models/tutor.dart';
 
 class Tutors extends StatefulWidget {
-  const Tutors({Key? key, this.usersSnap}) : super(key: key);
-  final QuerySnapshot? usersSnap;
+  const Tutors({Key? key, this.tutorList}) : super(key: key);
+  final List<Tutor>? tutorList;
   @override
   State<Tutors> createState() => _TutorsState();
 }
@@ -15,16 +15,15 @@ class Tutors extends StatefulWidget {
 class _TutorsState extends State<Tutors> {
   @override
   Widget build(BuildContext context) {
-    final data = widget.usersSnap;
+    final data = widget.tutorList;
     if (data == null) return CircularProgressIndicator();
     return ListView.builder(
-        itemCount: data.docs.length,
+        itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {
-          final doc = data.docs[index];
-          final tutor = Tutor.fromDocument(doc);
+          final tutor = data[index];
           return Padding(
             padding: const EdgeInsets.all(.1),
-            child: Single_prod(tutorId: doc.id, tutor: tutor),
+            child: Single_prod(tutorId: tutor.docId, tutor: tutor),
           );
         });
   }
