@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -127,6 +128,28 @@ stream -> listen
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: source);
     final pickedImageFile = io.File(pickedImage!.path);
+    if (pickedImage != null) {
+      final storageInstance = FirebaseStorage.instance.ref();
+      final storage = storageInstance.child("images");
+      final database = FirebaseDatabase.instance.ref("users");
+      try {
+        final uploadTask = await storage.putFile(pickedImageFile);
+        final currentUser = FirebaseAuth.instance.currentUser;
+        final currentUid = currentUser?.uid;
+        final uploadedImageUrl = await storage.getDownloadURL();
+        if (currentUid != null) {
+          database
+              .child(currentUid)
+              .set({"userImage": uploadedImageUrl}).then((value) {
+            print("Image uploaded!");
+          });
+        }
+
+        print("download url: $uploadedImageUrl");
+      } catch (error, trace) {
+        print("OnError: $trace");
+      }
+    }
     setState(() {
       _pickedImage = pickedImageFile;
     });
