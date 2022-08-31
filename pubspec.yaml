@@ -46,25 +46,22 @@ dependencies:
   fluttertoast: ^8.0.9
   provider: ^6.0.3
   firebase_core: ^1.20.0
-  firebase_storage: ^10.3.3
-  image_picker: ^0.8.5+3
+  #firebase_storage: ^10.3.3
+
+
   cached_network_image: ^3.2.1
   intl: ^0.17.0
   uuid: ^3.0.6
   firebase_database: ^9.0.20
   flutter_scale_ruler: ^0.0.3
- # flutter_auth_ui: ^3.0.0
+  image_picker: ^0.8.5+3
+  #image_picker: ^0.6.0
   flutter_riverpod: ^1.0.4
-  #firebase_auth_ui: ^1.0.1
+ 
   page_transition: ^2.0.9
+  firebase_storage: ^10.3.7
   
-  #cupertino_icons: any
-  #pinput: ^2.2.11
-  #firebase_auth: ^3.5.1
-  #google_fonts: any
- # flutterfire_ui: any
-  #firebase_core: ^1.20.0
-  #flutter_riverpod: any
+
 
 
 dev_dependencies:

@@ -7,13 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
 
 //my own imports
 import 'package:flutter_booking_app/pages/profile.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
 import 'package:flutter_booking_app/services/tutors.dart';
 import 'package:flutter_booking_app/pages/upcoming_lessons.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'dart:io' as io;
 
 import '../models/tutor.dart';
@@ -118,6 +120,26 @@ stream -> listen
   void search(String value) {}
 
   List<bool> _isSelected = [true, false];
+  //getting an image from user var and methods
+  io.File? _pickedImage;
+
+  void _pickImageGallery({ImageSource source = ImageSource.gallery}) async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: source);
+    final pickedImageFile = io.File(pickedImage!.path);
+    setState(() {
+      _pickedImage = pickedImageFile;
+    });
+    Navigator.pop(context);
+  }
+
+  void _remove() {
+    setState(() {
+      _pickedImage = null;
+    });
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     int? i;
@@ -201,17 +223,134 @@ stream -> listen
         ],
       ),
       //<--homepage side drop down menu -->
-      drawer: new Drawer(
-        child: new ListView(
+      drawer: Drawer(
+        child: ListView(
           children: <Widget>[
-            new UserAccountsDrawerHeader(
+            UserAccountsDrawerHeader(
               //displays user's name and email
               accountName: Text(name ?? ''),
               accountEmail: Text(email ?? ''),
-              currentAccountPicture: GestureDetector(
-                child: Stack(
-                  children: [
-                    new CircleAvatar(
+              currentAccountPicture: Stack(
+                children: [
+                  Container(
+                    width: 200,
+                    height: 200,
+                    child: CircleAvatar(
+                      radius: 71,
+                      backgroundColor: Colors.green,
+                      child: CircleAvatar(
+                        radius: 65,
+                        backgroundColor: Colors.blue,
+                        backgroundImage: _pickedImage == null
+                            ? Image.asset("assets/images/c1.jpg").image
+                            : FileImage(_pickedImage!),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: const BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                      child: const Icon(
+                        Icons.edit,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                'Choose option',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.cyan),
+                              ),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        _pickImageGallery(
+                                            source: ImageSource.camera);
+                                      },
+                                      splashColor: Colors.purpleAccent,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              Icons.camera,
+                                              color: Colors.purpleAccent,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Camera',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.pink),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: _pickImageGallery,
+                                      splashColor: Colors.purpleAccent,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              Icons.image,
+                                              color: Colors.purpleAccent,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Gallery',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.blue),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: _remove,
+                                      splashColor: Colors.purpleAccent,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              Icons.remove_circle,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Remove',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.red),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    },
+                  )
+                  /* new CircleAvatar(
                       radius: 100,
                       backgroundColor: Colors.grey,
                       child: Icon(
@@ -219,12 +358,12 @@ stream -> listen
                         color: Colors.white,
                       ),
                     ),
-                    Align(
+                    const Align(
                       alignment: Alignment.bottomRight,
                       child: Icon(Icons.edit),
-                    )
-                  ],
-                ),
+                      
+                    )*/
+                ],
               ),
               decoration: new BoxDecoration(color: Colors.red),
             ),
