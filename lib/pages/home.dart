@@ -128,7 +128,7 @@ stream -> listen
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: source);
     final pickedImageFile = io.File(pickedImage!.path);
-    if (pickedImage != null) {
+    /*   if (pickedImage != null) {
       final storageInstance = FirebaseStorage.instance.ref();
       final storage = storageInstance.child("images");
       final database = FirebaseDatabase.instance.ref("users");
@@ -149,7 +149,7 @@ stream -> listen
       } catch (error, trace) {
         print("OnError: $trace");
       }
-    }
+    }*/
     setState(() {
       _pickedImage = pickedImageFile;
     });
