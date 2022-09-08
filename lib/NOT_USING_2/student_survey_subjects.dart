@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 //my own imports
 import 'package:flutter_booking_app/pages/home.dart';
+import 'package:flutter_booking_app/pages/user_survey/student_survey_bio.dart';
 
 class StudentSurvey extends StatefulWidget {
   const StudentSurvey({Key? key, required this.userId}) : super(key: key);
@@ -64,7 +65,10 @@ class _StudentSurveyState extends State<StudentSurvey> {
         onPressed: () async {
           await saveSubjects(widget.userId);
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      TutorBookingProfile(userId: widget.userId!)));
         },
         label: const Text('Confirm'),
       ),

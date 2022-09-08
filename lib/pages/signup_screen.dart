@@ -8,7 +8,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_booking_app/widgets/reusable_widget.dart';
 import 'package:flutter_booking_app/utils/color_utils.dart';
 import 'package:flutter_booking_app/widgets/my_radio_button.dart';
-import 'package:flutter_booking_app/pages/student_survey.dart';
+import 'package:flutter_booking_app/pages/user_survey/student_survey_bio.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -128,7 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                StudentSurvey(userId: userId)));
+                                TutorBookingProfile(userId: userId)));
                   }).onError((error, stackTrace) {
                     print("Error ${error.toString()}");
                   });

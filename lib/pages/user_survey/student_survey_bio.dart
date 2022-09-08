@@ -59,7 +59,7 @@ class _TutorBookingProfileState extends State<TutorBookingProfile> {
       appBar: new AppBar(
         elevation: 0.1,
         backgroundColor: Colors.red,
-        title: Text('Tutor Profile'),
+        title: Text('Create Your Profile'),
       ),
       body: SingleChildScrollView(
         child: Form(
