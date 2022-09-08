@@ -19,7 +19,7 @@ class _MyWidgetState extends State<Profile> {
   String? email;
   String? oldPassword;
   String? newPassword;
-
+  String? image_url;
   String? userID;
 
   getCurrentUser() {
@@ -37,6 +37,7 @@ class _MyWidgetState extends State<Profile> {
         final data = doc.data() as Map<String, dynamic>;
         name = data["name"];
         email = data["email"];
+        image_url = data["imageUrl"];
         setState(() {});
         _nameController.text = name ?? '';
         _emailController.text = email ?? '';

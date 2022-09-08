@@ -58,7 +58,7 @@ class _TutorBookingProfileState extends State<TutorBookingProfile> {
     return Scaffold(
       appBar: new AppBar(
         elevation: 0.1,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.grey,
         title: Text('Create Your Profile'),
       ),
       body: SingleChildScrollView(

@@ -68,7 +68,7 @@ class _StudentSurveyState extends State<StudentSurvey> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      TutorBookingProfile(userId: widget.userId!)));
+                      TutorBookingProfile(userId: widget.userId)));
         },
         label: const Text('Confirm'),
       ),

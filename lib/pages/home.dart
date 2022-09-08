@@ -10,16 +10,13 @@ import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
-
+import 'dart:io' as io;
+import '../models/tutor.dart';
 //my own imports
 import 'package:flutter_booking_app/pages/profile.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
 import 'package:flutter_booking_app/services/tutors.dart';
 import 'package:flutter_booking_app/pages/upcoming_lessons.dart';
-
-import 'dart:io' as io;
-
-import '../models/tutor.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -30,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   String? name;
   String? email;
   String? interests;
+  String? image_url;
 
   List<Tutor>? tutors;
   List<Tutor>? originalTutors;
@@ -47,13 +45,18 @@ class _HomePageState extends State<HomePage> {
     final docRef = db.collection("users").doc(userID);
     docRef.get().then(
       (DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        // ...
-        name = data["name"];
-        email = data["email"];
-        String type = data["userType"];
-        getUsers(type);
-        setState(() {});
+        // final data = doc.data();
+        if (doc.data() != null) {
+          final data = doc.data() as Map<String, dynamic>;
+          print("ProfileData => $data");
+          // ...
+          name = data["name"];
+          email = data["email"];
+          String type = data["userType"];
+          getUsers(type);
+          image_url = data["imageUrl"];
+          setState(() {});
+        }
       },
       onError: (e) => print("Error getting document: $e"),
     );
@@ -99,21 +102,7 @@ class _HomePageState extends State<HomePage> {
 
     getCurrentUser();
   }
-/*
-  Widget buildProfileImage(Function(String) onAction) async {
-    ImagePicker imgPicker = ImagePicker();
-    final XFile? imageSelected =
-        await imgPicker.pickImage(source: ImageSource.gallery);
-    final storage = FirebaseStorage.instance;
-    final storageRef = storage.ref("profile_images");
-   // storageRef.putData(io.File(imageSelected?.path), null);
-  }
-  */
 
-/*
-Stremamcontroller -> sink -> add()
-stream -> listen 
-*/
 //<----- toggle button declaration for  ---->
 
   final viewModel = TutorDetailsViewModel();
@@ -128,28 +117,7 @@ stream -> listen
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: source);
     final pickedImageFile = io.File(pickedImage!.path);
-    /*   if (pickedImage != null) {
-      final storageInstance = FirebaseStorage.instance.ref();
-      final storage = storageInstance.child("images");
-      final database = FirebaseDatabase.instance.ref("users");
-      try {
-        final uploadTask = await storage.putFile(pickedImageFile);
-        final currentUser = FirebaseAuth.instance.currentUser;
-        final currentUid = currentUser?.uid;
-        final uploadedImageUrl = await storage.getDownloadURL();
-        if (currentUid != null) {
-          database
-              .child(currentUid)
-              .set({"userImage": uploadedImageUrl}).then((value) {
-            print("Image uploaded!");
-          });
-        }
 
-        print("download url: $uploadedImageUrl");
-      } catch (error, trace) {
-        print("OnError: $trace");
-      }
-    }*/
     setState(() {
       _pickedImage = pickedImageFile;
     });
@@ -256,18 +224,20 @@ stream -> listen
               currentAccountPicture: Stack(
                 children: [
                   Container(
-                    width: 200,
-                    height: 200,
-                    child: CircleAvatar(
-                      radius: 71,
-                      backgroundColor: Colors.green,
-                      child: CircleAvatar(
-                        radius: 65,
-                        backgroundColor: Colors.blue,
-                        backgroundImage: _pickedImage == null
-                            ? Image.asset("assets/images/c1.jpg").image
-                            : FileImage(_pickedImage!),
-                      ),
+                    width: 100,
+                    height: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: image_url == null
+                          ? const Icon(
+                              Icons.person,
+                              size: 60,
+                            )
+                          : Image.network(
+                              image_url!,
+                              //    width: 100, height: 100,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                   InkWell(
@@ -373,22 +343,9 @@ stream -> listen
                           });
                     },
                   )
-                  /* new CircleAvatar(
-                      radius: 100,
-                      backgroundColor: Colors.grey,
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const Align(
-                      alignment: Alignment.bottomRight,
-                      child: Icon(Icons.edit),
-                      
-                    )*/
                 ],
               ),
-              decoration: new BoxDecoration(color: Colors.red),
+              decoration: new BoxDecoration(color: Colors.grey),
             ),
             //body
 
@@ -396,7 +353,7 @@ stream -> listen
               onTap: () {},
               child: ListTile(
                 title: Text('Home Page'),
-                leading: Icon(Icons.home, color: Colors.red),
+                leading: Icon(Icons.home, color: Colors.amberAccent),
               ),
             ),
 
@@ -407,7 +364,7 @@ stream -> listen
               },
               child: ListTile(
                 title: Text('Profile'),
-                leading: Icon(Icons.person, color: Colors.red),
+                leading: Icon(Icons.person, color: Colors.amberAccent),
               ),
             ),
 
@@ -420,7 +377,7 @@ stream -> listen
               },
               child: ListTile(
                 title: Text('Upcoming Lessons'),
-                leading: Icon(Icons.shopping_basket, color: Colors.red),
+                leading: Icon(Icons.shopping_basket, color: Colors.amberAccent),
               ),
             ),
 
@@ -428,7 +385,7 @@ stream -> listen
               onTap: () {},
               child: ListTile(
                 title: Text('Past Lessons'),
-                leading: Icon(Icons.favorite, color: Colors.red),
+                leading: Icon(Icons.favorite, color: Colors.amberAccent),
               ),
             ),
 
@@ -457,39 +414,6 @@ stream -> listen
         ),
       ),
 
-      /*    body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('users').snapshots(),
-        builder: (context, snapshots) {
-          return (snapshots.connectionState == ConnectionState.waiting)
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : ListView.builder(
-                  itemCount: snapshots.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var data = snapshots.data!.docs[index].data()
-                        as Map<String, dynamic>;
-
-                    if (name!.isEmpty) {
-                      return Flexible(
-                          child: Tutors(
-                        usersSnap: usersSnap,
-                      ));
-                    }
-                    if (data['name']
-                        .toString()
-                        .toLowerCase()
-                        .startsWith(name!.toLowerCase())) {
-                      return Flexible(
-                          child: Tutors(
-                        usersSnap: usersSnap,
-                      ));
-                    }
-                    return Container();
-                  });
-        },
-      ),*/
-
       body: new Column(
         children: <Widget>[
 //<-----Listing the users on homepage ----->
@@ -502,37 +426,3 @@ stream -> listen
     );
   }
 }
-
-/*  new Row(
-            children: <Widget>[
-              ToggleButtons(
-                isSelected: _isSelected,
-                selectedColor: Colors.white,
-                color: Colors.black,
-                fillColor: Colors.lightBlue.shade900,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text("Online",
-                        style: TextStyle(fontSize: 18, color: Colors.white)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text("In-person",
-                        style: TextStyle(fontSize: 18, color: Colors.white)),
-                  ),
-                ],
-                onPressed: (int newIndex) {
-                  setState(() {
-                    for (int index = 0; index < _isSelected.length; index++) {
-                      if (index == newIndex) {
-                        _isSelected[index] = true;
-                      } else {
-                        _isSelected[index] = false;
-                      }
-                    }
-                  });
-                },
-              ),
-            ],
-          ),*/

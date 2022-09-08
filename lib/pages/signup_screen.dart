@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io' as io;
 
 //my own imports
 import 'package:flutter_booking_app/widgets/reusable_widget.dart';
@@ -22,15 +25,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
   late String userType;
+  String? image_url;
   //Radio Button Variable
   UserTypeEnum? _UserTypeEnum;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  void _createUser(String userId, String name, String email, String userType) {
+  void _createUser(
+      String userId, String name, String email, String userType, String url) {
     final db = FirebaseFirestore.instance;
     final user = <String, dynamic>{
       "name": name,
       "email": email,
       "userType": userType,
+      "imageUrl": url,
     };
 
     db
@@ -38,6 +45,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
         .doc(userId)
         .set(user)
         .onError((e, _) => print("Error writing document: $e"));
+  }
+
+  //getting an image from user var and methods
+  io.File? _pickedImage;
+
+  void _pickImageGallery({ImageSource source = ImageSource.gallery}) async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: source);
+    final pickedImageFile = io.File(pickedImage!.path);
+
+    setState(() {
+      _pickedImage = pickedImageFile;
+    });
+
+    Navigator.pop(context);
+  }
+
+  void _remove() {
+    setState(() {
+      _pickedImage = null;
+    });
+    Navigator.pop(context);
   }
 
   @override
@@ -66,6 +95,130 @@ class _SignUpScreenState extends State<SignUpScreen> {
             padding: EdgeInsets.fromLTRB(20, 120, 20, 0),
             child: Column(
               children: <Widget>[
+                Stack(
+                  children: [
+                    Container(
+                      margin:
+                          EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                      child: CircleAvatar(
+                        radius: 71,
+                        backgroundColor: Colors.grey,
+                        child: CircleAvatar(
+                          radius: 65,
+                          backgroundColor: Colors.grey,
+                          backgroundImage: _pickedImage == null
+                              ? null
+                              : FileImage(_pickedImage!),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                        top: 120,
+                        left: 110,
+                        child: RawMaterialButton(
+                          elevation: 10,
+                          fillColor: Colors.grey,
+                          child: Icon(Icons.add_a_photo),
+                          padding: EdgeInsets.all(15.0),
+                          shape: CircleBorder(),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Choose option',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.cyan),
+                                    ),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              _pickImageGallery(
+                                                  source: ImageSource.camera);
+                                            },
+                                            splashColor: Colors.purpleAccent,
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Icon(
+                                                    Icons.camera,
+                                                    color: Colors.purpleAccent,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Camera',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.pink),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: _pickImageGallery,
+                                            splashColor: Colors.purpleAccent,
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Icon(
+                                                    Icons.image,
+                                                    color: Colors.purpleAccent,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Gallery',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.blue),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: _remove,
+                                            splashColor: Colors.purpleAccent,
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Icon(
+                                                    Icons.remove_circle,
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Remove',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.red),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
+                        ))
+                  ],
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -113,16 +266,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ],
                 ),
                 //<-----users inputs get checked in firestore and saved to firebase -->
-                firebaseUIButton(context, "Sign Up", () {
-                  FirebaseAuth.instance
+                firebaseUIButton(context, "Sign Up", () async {
+                  // if (image_url == null) {
+                  //   return;
+                  // }
+
+                  final ref = FirebaseStorage.instance
+                      .ref()
+                      .child('usersImages')
+                      .child(_userNameTextController.text + '.jpg');
+                  await ref.putFile(_pickedImage!);
+                  image_url = await ref.getDownloadURL();
+
+                  print("_pickedImage => $_pickedImage");
+
+                  _auth
                       .createUserWithEmailAndPassword(
                           email: _emailTextController.text,
                           password: _passwordTextController.text)
                       .then((userCredential) {
                     print("Created New Account");
                     final userId = userCredential.user!.uid;
+
+                    print("$image_url");
                     _createUser(userId, _userNameTextController.text,
-                        _emailTextController.text, userType);
+                        _emailTextController.text, userType, image_url ?? "");
 
                     Navigator.push(
                         context,
