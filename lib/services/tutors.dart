@@ -47,24 +47,10 @@ class Single_prod extends StatelessWidget {
                         tutor: tutor,
                         tutorId: tutorId,
                       ))),
-              /*  child: Row(
-                children: [
-                  CircleAvatar(
-                      radius: 40, backgroundImage: AssetImage(tutor.avatar)),
-                  Text(
-                    tutor.name,
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey),
-                  ),
-                ],
-              ),*/
-
               child: ListTile(
                 leading: CircleAvatar(
                   radius: 40,
-                  backgroundImage: AssetImage(tutor.avatar),
+                  backgroundImage: NetworkImage(tutor.avatar),
                 ),
                 title: Text(
                   tutor.name,

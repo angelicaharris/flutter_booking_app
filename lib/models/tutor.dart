@@ -26,7 +26,7 @@ class Tutor {
       price: priceFromDoc(doc),
       bio: doc['bio'],
       docId: doc.id,
-      avatar: 'assets/images/c3.png',
+      avatar: doc['imageUrl'],
       interests: doc['interests'],
     );
   }

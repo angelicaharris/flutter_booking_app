@@ -235,7 +235,6 @@ class _HomePageState extends State<HomePage> {
                             )
                           : Image.network(
                               image_url!,
-                              //    width: 100, height: 100,
                               fit: BoxFit.cover,
                             ),
                     ),
