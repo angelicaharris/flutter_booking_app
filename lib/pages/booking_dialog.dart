@@ -268,11 +268,10 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
               initialEntryMode: DatePickerEntryMode.calendarOnly,
               initialDate:
                   DateTime.fromMillisecondsSinceEpoch(arguments as int),
-              firstDate: DateTime(2021),
+              firstDate: DateTime.now(),
               lastDate: DateTime(2023));
         });
   }
 
-  final RestorableDateTime _selectedDate =
-      RestorableDateTime(DateTime(2022, 08, 3));
+  final RestorableDateTime _selectedDate = RestorableDateTime(DateTime.now());
 }

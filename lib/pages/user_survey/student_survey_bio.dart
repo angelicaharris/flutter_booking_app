@@ -60,6 +60,7 @@ class _TutorBookingProfileState extends State<TutorBookingProfile> {
         elevation: 0.1,
         backgroundColor: Colors.grey,
         title: Text('Create Your Profile'),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -88,17 +89,16 @@ class _TutorBookingProfileState extends State<TutorBookingProfile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: options,
               ),
+              ElevatedButton(
+                  onPressed: () async {
+                    await saveSubjects(widget.userId);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
+                  },
+                  child: Text('Confirm')),
             ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          await saveSubjects(widget.userId);
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
-        },
-        label: const Text('Confirm'),
       ),
     );
   }

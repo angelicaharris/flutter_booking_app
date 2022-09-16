@@ -161,7 +161,6 @@ class _HomePageState extends State<HomePage> {
                       tutorList = originalTutors;
                       return true;
                     }
-
                     final tutor = element as Tutor;
                     final interests = tutor.interests
                         .keys; // {"Maths": true, "Discrete Maths": false}, m
@@ -176,15 +175,12 @@ class _HomePageState extends State<HomePage> {
                             .toLowerCase() // "maths", discrete maths
                             .startsWith(val
                                 .toLowerCase()); // wa --> maths; discrete maths
-
                       } else {
                         return false;
                       }
                     }).isNotEmpty;
                   }).toList();
-
                   tutors = tutorList;
-
                   print("searchS: ${tutors?.length}");
                 });
               }
@@ -213,6 +209,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: null),
         ],
       ),
+
       //<--homepage side drop down menu -->
       drawer: Drawer(
         child: ListView(
@@ -416,6 +413,7 @@ class _HomePageState extends State<HomePage> {
       body: new Column(
         children: <Widget>[
 //<-----Listing the users on homepage ----->
+
           Flexible(
               child: Tutors(
             tutorList: tutors,
