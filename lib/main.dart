@@ -30,8 +30,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
-          scaffoldBackgroundColor: Colors.grey),
+          primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
       home: user != null ? HomePage() : SignInScreen(),
     );
   }

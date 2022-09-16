@@ -300,7 +300,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   }).onError((error, stackTrace) {
                     print("Error ${error.toString()}");
                   });
-                })
+                }),
               ],
             ),
           ))),

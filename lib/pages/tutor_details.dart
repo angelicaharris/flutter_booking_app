@@ -37,6 +37,7 @@ class ProductDetailsState extends State<ProductDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme.primary;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -50,13 +51,37 @@ class ProductDetailsState extends State<ProductDetails> {
           child: Text(widget.tutor.name),
         ),
       ),
-      body: new ListView(
-        children: <Widget>[
-          //second button
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: MaterialButton(
+      body: Padding(
+        padding: EdgeInsets.only(top: 16.0),
+        child: new ListView(
+          children: <Widget>[
+            Center(
+              child: Stack(
+                children: [
+                  ClipOval(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Ink.image(
+                        image: NetworkImage(widget.tutor.avatar),
+                        fit: BoxFit.cover,
+                        width: 128,
+                        height: 128,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            Center(
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: StadiumBorder(),
+                      onPrimary: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    ),
+                    child: Text('Schedule Lesson'),
                     onPressed: () {
                       showDialog(
                           context: context,
@@ -66,15 +91,27 @@ class ProductDetailsState extends State<ProductDetails> {
                               content: BookingDialog(tutorId: widget.tutorId),
                             );
                           });
-                    },
-                    color: Colors.red,
-                    textColor: Colors.white,
-                    elevation: 0.2,
-                    child: new Text("Book")),
+                    })),
+            const SizedBox(height: 24),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 48),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'About',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    widget.tutor.bio,
+                    style: TextStyle(fontSize: 16, height: 1.4),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

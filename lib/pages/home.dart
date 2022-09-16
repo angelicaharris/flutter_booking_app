@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
         title: Card(
           child: TextField(
             decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search), hintText: 'Search...'),
+                prefixIcon: Icon(Icons.search), hintText: 'Search Subjects'),
             /*
                   ? - nullable
                   ! - non-nullable
@@ -188,25 +188,42 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: <Widget>[
-          new IconButton(
-            icon: Icon(
-              Icons.logout,
-              color: Colors.white,
+          Container(
+            width: 50,
+            height: 30,
+            child: Stack(
+              children: [
+                Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                Container(
+                  width: 30,
+                  height: 30,
+                  alignment: Alignment.topRight,
+                  margin: EdgeInsets.only(top: 5),
+                  child: Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xffc32c37),
+                        border: Border.all(color: Colors.white, width: 1)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: Center(
+                        child: Text(
+                          '3',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            onPressed: () {
-              FirebaseAuth.instance.signOut().then((value) {
-                print("Signed Out");
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignInScreen()));
-              });
-            },
           ),
-          new IconButton(
-              icon: Icon(
-                Icons.notifications,
-                color: Colors.white,
-              ),
-              onPressed: null),
         ],
       ),
 
@@ -388,21 +405,17 @@ class _HomePageState extends State<HomePage> {
             const Divider(),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+                FirebaseAuth.instance.signOut().then((value) {
+                  print("Signed Out");
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignInScreen()));
+                });
+              },
               child: ListTile(
-                title: Text('Settings'),
+                title: Text('Logout'),
                 leading: Icon(
-                  Icons.settings,
-                ),
-              ),
-            ),
-
-            InkWell(
-              onTap: () {},
-              child: ListTile(
-                title: Text('About'),
-                leading: Icon(
-                  Icons.help,
+                  Icons.logout,
                 ),
               ),
             ),

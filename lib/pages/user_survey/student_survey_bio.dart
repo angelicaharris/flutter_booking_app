@@ -74,6 +74,8 @@ class _TutorBookingProfileState extends State<TutorBookingProfile> {
                 onChanged: (value) {
                   this.bio = value;
                 },
+                maxLines: 5,
+                minLines: 3,
               ),
               TextFormField(
                 decoration: InputDecoration(
