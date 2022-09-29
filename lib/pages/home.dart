@@ -17,7 +17,6 @@ import 'package:flutter_booking_app/pages/profile.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
 import 'package:flutter_booking_app/services/tutors.dart';
 import 'package:flutter_booking_app/pages/upcoming_lessons.dart';
-import 'package:flutter_booking_app/widgets/slider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -29,10 +28,11 @@ class _HomePageState extends State<HomePage> {
   String? email;
   String? interests;
   String? image_url;
-  int? price;
+  // int? price;
 
   List<Tutor>? tutors;
   List<Tutor>? originalTutors;
+  double _currentSliderValue = 20;
 
 // <--- Firebase get users from collection --->
   getCurrentUser() {
@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
           name = data["name"];
           email = data["email"];
           String type = data["userType"];
-          price = data["price"];
+          //  price = data["price"];
           getUsers(type);
           image_url = data["imageUrl"];
           setState(() {});
@@ -153,6 +153,7 @@ class _HomePageState extends State<HomePage> {
                   int x =i;
                 */
             onChanged: (val) {
+              print("original tutors: $originalTutors");
               if (tutors != null) {
                 List<Tutor>? tutorList;
                 setState(() {
@@ -166,17 +167,24 @@ class _HomePageState extends State<HomePage> {
                     final tutor = element as Tutor;
                     final interests = tutor.interests
                         .keys; // {"Maths": true, "Discrete Maths": false}, m
+                    print("interests: $interests");
                     final interestMap = tutor
                         .interests; // The interest booleans //interstMap['Maths'] == false -> False
+                    print("interestMap: $interestMap");
+                    final price = tutor.price;
+                    print("price: $price");
 
                     return interests.where((element) {
                       //Iterates through the interests element and check which item starts  with @val
                       // @param val - The textfield text
+                      print("element: $element");
                       if (interestMap[element] == true) {
+                        print("interestMap[element]: $interestMap[element]");
                         return element
                             .toLowerCase() // "maths", discrete maths
                             .startsWith(val
                                 .toLowerCase()); // wa --> maths; discrete maths
+
                       } else {
                         return false;
                       }
@@ -432,7 +440,26 @@ class _HomePageState extends State<HomePage> {
             'Price',
             style: TextStyle(fontSize: 18),
           ),
-          SliderTogglePrice(),
+          Slider(
+            value: _currentSliderValue,
+            max: 100,
+            divisions: 5,
+            label: _currentSliderValue.round().toString(),
+            onChanged: (value) {
+              if (tutors != null) {
+                List<Tutor>? tutorList;
+                setState(() {
+                  _currentSliderValue = value;
+                });
+                setState(() {
+                  tutorList = originalTutors?.where((element) {
+                    return double.parse(element.price) <= _currentSliderValue;
+                  }).toList();
+                  tutors = tutorList;
+                });
+              }
+            },
+          ),
           //<-----Listing the users on homepage ----->
           Flexible(
               child: Tutors(
