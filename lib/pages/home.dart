@@ -17,6 +17,7 @@ import 'package:flutter_booking_app/pages/profile.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
 import 'package:flutter_booking_app/services/tutors.dart';
 import 'package:flutter_booking_app/pages/upcoming_lessons.dart';
+import 'package:flutter_booking_app/widgets/slider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   String? email;
   String? interests;
   String? image_url;
+  int? price;
 
   List<Tutor>? tutors;
   List<Tutor>? originalTutors;
@@ -53,6 +55,7 @@ class _HomePageState extends State<HomePage> {
           name = data["name"];
           email = data["email"];
           String type = data["userType"];
+          price = data["price"];
           getUsers(type);
           image_url = data["imageUrl"];
           setState(() {});
@@ -134,7 +137,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     int? i;
-    int x = i ?? 0; //
+    int x = i ?? 0;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.1,
@@ -146,7 +149,6 @@ class _HomePageState extends State<HomePage> {
             /*
                   ? - nullable
                   ! - non-nullable
-
                   int? i; 
                   int x =i;
                 */
@@ -422,11 +424,16 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-
+      // ignore: unnecessary_new
       body: new Column(
         children: <Widget>[
-//<-----Listing the users on homepage ----->
-
+//<--------PriceSliderClass---------->
+          Text(
+            'Price',
+            style: TextStyle(fontSize: 18),
+          ),
+          SliderTogglePrice(),
+          //<-----Listing the users on homepage ----->
           Flexible(
               child: Tutors(
             tutorList: tutors,

@@ -11,7 +11,6 @@ class MyRadioButton extends StatelessWidget {
     required this.selectedUserType,
     required this.onChanged,
   }) : super(key: key);
-
   String title;
   UserTypeEnum value;
   UserTypeEnum? selectedUserType;
