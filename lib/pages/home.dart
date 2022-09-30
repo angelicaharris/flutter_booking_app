@@ -33,6 +33,16 @@ class _HomePageState extends State<HomePage> {
   List<Tutor>? tutors;
   List<Tutor>? originalTutors;
   double _currentSliderValue = 20;
+  final List<String> subjects = [
+    'ACT English',
+    'ACT Math',
+    'ACT Reading',
+    'ACT Science',
+    'ACT Writing',
+    'SAT English',
+    'SAT Reading',
+    'SAT Math',
+  ];
 
 // <--- Firebase get users from collection --->
   getCurrentUser() {
@@ -143,47 +153,38 @@ class _HomePageState extends State<HomePage> {
         elevation: 0.1,
         backgroundColor: Color.fromARGB(255, 129, 143, 155),
         title: Card(
-          child: TextField(
-            decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search), hintText: 'Search Subjects'),
-            /*
-                  ? - nullable
-                  ! - non-nullable
-                  int? i; 
-                  int x =i;
-                */
-            onChanged: (val) {
-              print("original tutors: $originalTutors");
+          child: DropdownButtonFormField(
+            items: subjects.map((subject) {
+              return DropdownMenuItem(
+                value: subject,
+                child: Text(subject),
+              );
+            }).toList(),
+            onChanged: (String? val) {
+              print("val: $val");
               if (tutors != null) {
                 List<Tutor>? tutorList;
                 setState(() {
                   tutorList = originalTutors?.where((element) {
-                    print("search: $element");
-
-                    if (val.isEmpty) {
+                    if (val == '') {
                       tutorList = originalTutors;
                       return true;
                     }
                     final tutor = element as Tutor;
                     final interests = tutor.interests
                         .keys; // {"Maths": true, "Discrete Maths": false}, m
-                    print("interests: $interests");
+
                     final interestMap = tutor
                         .interests; // The interest booleans //interstMap['Maths'] == false -> False
-                    print("interestMap: $interestMap");
-                    final price = tutor.price;
-                    print("price: $price");
 
                     return interests.where((element) {
                       //Iterates through the interests element and check which item starts  with @val
                       // @param val - The textfield text
-                      print("element: $element");
+
                       if (interestMap[element] == true) {
-                        print("interestMap[element]: $interestMap[element]");
-                        return element
-                            .toLowerCase() // "maths", discrete maths
-                            .startsWith(val
-                                .toLowerCase()); // wa --> maths; discrete maths
+                        return element.compareTo(val!) ==
+                            0; // "maths", discrete maths
+                        // wa --> maths; discrete maths
 
                       } else {
                         return false;
