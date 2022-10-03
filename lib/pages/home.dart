@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' as io;
 import '../models/tutor.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 //my own imports
 import 'package:flutter_booking_app/pages/profile.dart';
 import 'package:flutter_booking_app/pages/signin_screen.dart';
@@ -160,7 +161,8 @@ class _HomePageState extends State<HomePage> {
                 child: Text(subject),
               );
             }).toList(),
-            onChanged: (String? val) {
+            onChanged: (String? val) {},
+            /*  onChanged: (String? val) {
               print("val: $val");
               if (tutors != null) {
                 List<Tutor>? tutorList;
@@ -195,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                   print("searchS: ${tutors?.length}");
                 });
               }
-            },
+            },*/
           ),
         ),
         actions: <Widget>[
@@ -436,6 +438,38 @@ class _HomePageState extends State<HomePage> {
       // ignore: unnecessary_new
       body: new Column(
         children: <Widget>[
+          MultiSelectDialogField(
+            items: subjects.map((e) => MultiSelectItem(e, e)).toList(),
+            listType: MultiSelectListType.CHIP,
+            onConfirm: (values) {
+              if (tutors != null) {
+                List<Tutor>? tutorList;
+                setState(() {
+                  tutorList = originalTutors?.where((element) {
+                    if (values.isEmpty) {
+                      tutorList = originalTutors;
+                      return true;
+                    }
+                    final tutor = element as Tutor;
+                    final interests = tutor.interests
+                        .keys; // {"Maths": true, "Discrete Maths": false}, m
+
+                    final interestMap = tutor
+                        .interests; // The interest booleans //interstMap['Maths'] == false -> False
+
+                    for (var val in values) {
+                      if (interestMap[val] == false) {
+                        return false;
+                      }
+                    }
+                    return true;
+                  }).toList();
+                  tutors = tutorList;
+                  print("searchS: ${tutors?.length}");
+                });
+              }
+            },
+          ),
 //<--------PriceSliderClass---------->
           Text(
             'Price',
