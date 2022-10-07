@@ -6,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_booking_app/pages/chats/chats_page.dart';
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,7 +30,8 @@ class _HomePageState extends State<HomePage> {
   String? email;
   String? interests;
   String? image_url;
-  // int? price;
+  List<Tutor>? multiSelectListTutors;
+  List<Tutor>? sliderListTutors;
 
   List<Tutor>? tutors;
   List<Tutor>? originalTutors;
@@ -153,60 +155,13 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         elevation: 0.1,
         backgroundColor: Color.fromARGB(255, 129, 143, 155),
-        title: Card(
-          child: DropdownButtonFormField(
-            items: subjects.map((subject) {
-              return DropdownMenuItem(
-                value: subject,
-                child: Text(subject),
-              );
-            }).toList(),
-            onChanged: (String? val) {},
-            /*  onChanged: (String? val) {
-              print("val: $val");
-              if (tutors != null) {
-                List<Tutor>? tutorList;
-                setState(() {
-                  tutorList = originalTutors?.where((element) {
-                    if (val == '') {
-                      tutorList = originalTutors;
-                      return true;
-                    }
-                    final tutor = element as Tutor;
-                    final interests = tutor.interests
-                        .keys; // {"Maths": true, "Discrete Maths": false}, m
-
-                    final interestMap = tutor
-                        .interests; // The interest booleans //interstMap['Maths'] == false -> False
-
-                    return interests.where((element) {
-                      //Iterates through the interests element and check which item starts  with @val
-                      // @param val - The textfield text
-
-                      if (interestMap[element] == true) {
-                        return element.compareTo(val!) ==
-                            0; // "maths", discrete maths
-                        // wa --> maths; discrete maths
-
-                      } else {
-                        return false;
-                      }
-                    }).isNotEmpty;
-                  }).toList();
-                  tutors = tutorList;
-                  print("searchS: ${tutors?.length}");
-                });
-              }
-            },*/
-          ),
-        ),
         actions: <Widget>[
           Container(
             width: 50,
             height: 30,
             child: Stack(
               children: [
-                Icon(
+                /*  Icon(
                   Icons.notifications,
                   color: Colors.white,
                   size: 30,
@@ -233,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
@@ -408,10 +363,13 @@ class _HomePageState extends State<HomePage> {
             ),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => new ChatsPage()));
+              },
               child: ListTile(
-                title: Text('Past Lessons'),
-                leading: Icon(Icons.favorite, color: Colors.amberAccent),
+                title: Text('Chats'),
+                leading: Icon(Icons.message, color: Colors.purple),
               ),
             ),
 
@@ -443,11 +401,10 @@ class _HomePageState extends State<HomePage> {
             listType: MultiSelectListType.CHIP,
             onConfirm: (values) {
               if (tutors != null) {
-                List<Tutor>? tutorList;
                 setState(() {
-                  tutorList = originalTutors?.where((element) {
+                  multiSelectListTutors = originalTutors?.where((element) {
                     if (values.isEmpty) {
-                      tutorList = originalTutors;
+                      multiSelectListTutors = originalTutors;
                       return true;
                     }
                     final tutor = element as Tutor;
@@ -464,8 +421,7 @@ class _HomePageState extends State<HomePage> {
                     }
                     return true;
                   }).toList();
-                  tutors = tutorList;
-                  print("searchS: ${tutors?.length}");
+                  tutors = multiSelectListTutors;
                 });
               }
             },
@@ -482,20 +438,23 @@ class _HomePageState extends State<HomePage> {
             label: _currentSliderValue.round().toString(),
             onChanged: (value) {
               if (tutors != null) {
-                List<Tutor>? tutorList;
                 setState(() {
                   _currentSliderValue = value;
                 });
                 setState(() {
-                  tutorList = originalTutors?.where((element) {
+                  sliderListTutors = originalTutors?.where((element) {
                     return double.parse(element.price) <= _currentSliderValue;
                   }).toList();
-                  tutors = tutorList;
+                  tutors = multiSelectListTutors
+                      ?.where(
+                          (itemsTut) => sliderListTutors!.contains(itemsTut))
+                      .toList();
                 });
               }
             },
           ),
           //<-----Listing the users on homepage ----->
+
           Flexible(
               child: Tutors(
             tutorList: tutors,

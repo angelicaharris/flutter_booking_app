@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_booking_app/main.dart';
 import 'package:flutter_booking_app/models/tutor.dart';
+import 'package:flutter_booking_app/pages/Reviews/comments.dart';
 import 'package:flutter_booking_app/pages/booking_dialog.dart';
 import 'package:flutter_booking_app/pages/home.dart';
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
@@ -107,9 +108,34 @@ class ProductDetailsState extends State<ProductDetails> {
                     widget.tutor.bio,
                     style: TextStyle(fontSize: 16, height: 1.4),
                   ),
+                  Text(
+                    "Price: \$" + widget.tutor.price,
+                    style: TextStyle(fontSize: 16, height: 1.4),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Reviews',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  )
                 ],
               ),
             ),
+            Center(
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: StadiumBorder(),
+                      onPrimary: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    ),
+                    child: Text('Post a Review'),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Comments(tutorId: widget.tutorId)));
+                    })),
           ],
         ),
       ),

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_booking_app/pages/tutor_booking.dart';
 import 'package:uuid/uuid.dart';
-import 'package:flutter_booking_app/pages/home.dart';
 
 class TutorDetailsViewModel {
   final StreamController<String> _bookNow = StreamController.broadcast();

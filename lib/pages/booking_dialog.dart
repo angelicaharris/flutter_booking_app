@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_booking_app/pages/tutor_booking.dart';
-import 'package:flutter_booking_app/pages/tutor_details.dart';
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 import 'package:intl/intl.dart';
 
