@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_booking_app/main.dart';
 import 'package:flutter_booking_app/models/tutor.dart';
-import 'package:flutter_booking_app/pages/Reviews/comments.dart';
+import 'package:flutter_booking_app/pages/Reviews/newMessagesWidget.dart';
 import 'package:flutter_booking_app/pages/booking_dialog.dart';
+import 'package:flutter_booking_app/pages/Reviews/chatPage.dart';
 import 'package:flutter_booking_app/pages/home.dart';
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 
@@ -128,14 +129,34 @@ class ProductDetailsState extends State<ProductDetails> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                     ),
+                    child: Text('Post Review'),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text("Request a Lesson"),
+                              content: BookingDialog(tutorId: widget.tutorId),
+                            );
+                          });
+                    })),
+
+            /*  Center(
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: StadiumBorder(),
+                      onPrimary: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    ),
                     child: Text('Post a Review'),
                     onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  Comments(tutorId: widget.tutorId)));
-                    })),
+                                  ChatPage(tutorId: widget.tutorId)));
+                    })),*/
           ],
         ),
       ),

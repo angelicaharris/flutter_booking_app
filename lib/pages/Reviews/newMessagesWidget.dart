@@ -8,16 +8,16 @@ import 'package:flutter_booking_app/pages/Reviews/model/model_comment.dart';
 import 'package:flutter_booking_app/pages/Reviews/services/services_comment.dart';
 import 'package:flutter_booking_app/pages/tutor_details.dart';
 
-class Comments extends StatefulWidget {
+class NewMessageWidget extends StatefulWidget {
   final String tutorId;
   late TutorReviewServices tutorReviewServices = TutorReviewServices();
-  Comments({Key? key, required this.tutorId}) : super(key: key);
+  NewMessageWidget({Key? key, required this.tutorId}) : super(key: key);
 
   @override
   _CommentsState createState() => _CommentsState();
 }
 
-class _CommentsState extends State<Comments> {
+class _CommentsState extends State<NewMessageWidget> {
   final _controller = TextEditingController();
   String message = '';
 
