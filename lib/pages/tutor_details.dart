@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_booking_app/main.dart';
+import 'package:flutter_booking_app/models/student.dart';
 import 'package:flutter_booking_app/models/tutor.dart';
-import 'package:flutter_booking_app/pages/Reviews/newMessagesWidget.dart';
 import 'package:flutter_booking_app/pages/booking_dialog.dart';
-import 'package:flutter_booking_app/pages/Reviews/chatPage.dart';
+
 import 'package:flutter_booking_app/pages/home.dart';
+import 'package:flutter_booking_app/pages/reviews/reviewsDialog.dart';
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 
 class ProductDetails extends StatefulWidget {
   final Tutor tutor;
+  final List<ReviewsDialog>? reviewList;
   final tutoDetailViewModel = TutorDetailsViewModel();
   final String tutorId;
 
-  ProductDetails({required this.tutorId, required this.tutor});
+  ProductDetails({required this.tutorId, required this.tutor, this.reviewList});
 
   @override
   State<ProductDetails> createState() => ProductDetailsState();
@@ -39,6 +41,7 @@ class ProductDetailsState extends State<ProductDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final data = widget.reviewList;
     final color = Theme.of(context).colorScheme.primary;
     return Scaffold(
       appBar: AppBar(
@@ -129,37 +132,61 @@ class ProductDetailsState extends State<ProductDetails> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                     ),
-                    child: Text('Post Review'),
+                    child: Text('Post a Review'),
                     onPressed: () {
                       showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
                               title: Text("Request a Lesson"),
-                              content: BookingDialog(tutorId: widget.tutorId),
+                              content: ReviewsDialog(tutorId: widget.tutorId),
                             );
                           });
                     })),
-
-            /*  Center(
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(),
-                      onPrimary: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                    ),
-                    child: Text('Post a Review'),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ChatPage(tutorId: widget.tutorId)));
-                    })),*/
+            ListView.builder(
+                itemCount: data!.length ?? 0,
+                itemBuilder: (BuildContext context, int index) {
+                  final student = data[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(.1),
+                    child:
+                        ReviewsListBuilder(studentId: student, student: tutor),
+                  );
+                }),
           ],
         ),
       ),
     );
+  }
+}
+
+class ReviewsListBuilder extends StatelessWidget {
+  final Student student;
+  final String studentId;
+
+  ReviewsListBuilder({required this.studentId, required this.student});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: Colors.grey,
+        child: Card(
+          child: Material(
+            child: InkWell(
+              child: ListTile(
+                leading: CircleAvatar(
+                  radius: 40,
+                  backgroundImage: NetworkImage(student.avatar),
+                ),
+                title: Text(
+                  student.email,
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 }
