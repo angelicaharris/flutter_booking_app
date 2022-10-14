@@ -5,6 +5,7 @@ import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 class ReviewsDialog extends StatefulWidget {
   final String tutorId;
@@ -18,6 +19,8 @@ class _ReviewsDialogState extends State<ReviewsDialog> {
   TextEditingController reviewController = TextEditingController();
   String input = '';
   double rating = 0.0;
+  final db = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,6 +91,12 @@ class _ReviewsDialogState extends State<ReviewsDialog> {
                   String? email = FirebaseAuth.instance.currentUser?.email;
                   String? userImage =
                       FirebaseAuth.instance.currentUser?.photoURL;
+                  String timestamp;
+
+                  DateTime now = DateTime.now();
+                  String formatDate =
+                      DateFormat('MM-dd-yyyy – kk:mm:s').format(now);
+                  timestamp = formatDate;
                   Map<String, dynamic> json = {};
                   json["rating"] = rating;
                   json["response"] = input;
@@ -95,7 +104,7 @@ class _ReviewsDialogState extends State<ReviewsDialog> {
                   json["uid"] = currentUId;
                   json["email"] = email;
                   json["userImage"] = userImage;
-                  // json["datePosted"] = datePosted;
+                  json["datePosted"] = timestamp;
                   final result = await reviewRef
                       .doc(widget.tutorId)
                       .collection("userReviews")

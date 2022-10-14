@@ -208,6 +208,7 @@ class ProductDetailsState extends State<ProductDetails> {
                     .collection('reviews')
                     .doc(widget.tutorId)
                     .collection('userReviews')
+                    .orderBy('datePosted', descending: true)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -249,6 +250,7 @@ class ProductDetailsState extends State<ProductDetails> {
                                       color: Colors.yellow,
                                       borderColor: Colors.yellow,
                                       spacing: 0.0),
+                                  leading: Text(document["datePosted"]),
                                 ),
                               ),
                             ),
