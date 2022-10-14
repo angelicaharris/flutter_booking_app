@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter_booking_app/main.dart';
+import 'package:flutter_booking_app/models/modelUpLesson.dart';
 import 'package:flutter_booking_app/models/student.dart';
 import 'package:flutter_booking_app/models/tutor.dart';
 import 'package:flutter_booking_app/pages/booking_dialog.dart';
@@ -11,7 +14,10 @@ import 'package:flutter_booking_app/pages/home.dart';
 import 'package:flutter_booking_app/pages/reviews/demoReviews.dart';
 import 'package:flutter_booking_app/pages/reviews/reviewsDialog.dart';
 import 'package:flutter_booking_app/pages/reviews/reviewsList.dart';
+import 'package:flutter_booking_app/pages/reviews/reviewsService.dart';
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
+import 'package:flutter_booking_app/services/serviceUpLessons.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ProductDetails extends StatefulWidget {
   final Tutor tutor;
@@ -26,6 +32,39 @@ class ProductDetails extends StatefulWidget {
 }
 
 class ProductDetailsState extends State<ProductDetails> {
+  final StreamController<List<ModelUpcomingLesson>> _modelUpcomingLesson =
+      StreamController.broadcast();
+  Stream<List<ModelUpcomingLesson>> get modelUpcomingLesson =>
+      _modelUpcomingLesson.stream;
+
+  void getLessons() {
+    final db = FirebaseFirestore.instance;
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return;
+    }
+
+    db
+        .collection("tutors")
+        .doc(currentUser.uid)
+        .collection("bookings")
+        .get()
+        .then(
+      (res) {
+        print("Error completing: ${res.docs.length}");
+        res.docs.forEach((element) {
+          print("Error completing: ${element.data()}");
+        });
+        final docs = res.docs
+            .map((e) => ModelUpcomingLesson.fromDocument(e.data()))
+            .toList();
+        // parse data to our model //
+        _modelUpcomingLesson.sink.add(docs);
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+  }
+
   @override
   void initState() {
     final bookNow = widget.tutoDetailViewModel.bookNow;
@@ -42,7 +81,7 @@ class ProductDetailsState extends State<ProductDetails> {
           .showSnackBar(SnackBar(content: Text(error.toString())));
     });
     super.initState();
-    // getReviews();
+    getLessons();
   }
 
   @override
@@ -165,7 +204,6 @@ class ProductDetailsState extends State<ProductDetails> {
                               builder: (context) =>
                                   new DemoReviews(tutorId: widget.tutorId)));
                     })),
-
             /* Flexible(
                 child: reviewsList!.isNotEmpty
                     ? ReviewsList(reviewsList: reviewsList)

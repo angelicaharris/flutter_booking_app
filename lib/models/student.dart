@@ -8,6 +8,7 @@ class Student {
   final String bio;
   final String avatar;
   final String docId;
+  final int datePosted;
   final Map<String, dynamic> interests;
 
   Student(
@@ -17,18 +18,19 @@ class Student {
       required this.bio,
       required this.interests,
       required this.avatar,
-      required this.docId});
+      required this.docId,
+      required this.datePosted});
 
   factory Student.fromDocument(DocumentSnapshot doc) {
     return Student(
-      name: doc['name'],
-      email: doc['email'],
-      price: priceFromDoc(doc),
-      bio: doc['bio'],
-      docId: doc.id,
-      avatar: doc['imageUrl'],
-      interests: doc['interests'],
-    );
+        name: doc['name'],
+        email: doc['email'],
+        price: priceFromDoc(doc),
+        bio: doc['bio'],
+        docId: doc.id,
+        avatar: doc['imageUrl'],
+        interests: doc['interests'],
+        datePosted: doc['datePosted']);
   }
 }
 

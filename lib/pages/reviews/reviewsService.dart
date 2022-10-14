@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_booking_app/models/student.dart';
 
 //my own imports
-import 'package:flutter_booking_app/models/student.dart';
+
 import 'package:intl/intl.dart';
 
-class ReviewsService extends StatefulWidget {
-  const ReviewsService({Key? key, this.reviewsList}) : super(key: key);
-  final List<Student>? reviewsList;
+class ReviewService extends StatefulWidget {
+  const ReviewService({Key? key, this.upcomingLessonList}) : super(key: key);
+  final List<Student>? upcomingLessonList;
   @override
-  State<ReviewsService> createState() => _ServiceReviewsServiceState();
+  State<ReviewService> createState() => _ServiceUpLessonsState();
 }
 
-class _ServiceReviewsServiceState extends State<ReviewsService> {
+class _ServiceUpLessonsState extends State<ReviewService> {
   @override
   Widget build(BuildContext context) {
-    final data = widget.reviewsList ?? [];
+    final data = widget.upcomingLessonList ?? [];
     //if (data == null) return CircularProgressIndicator();
     return Container(
       child: ListView.builder(
@@ -22,60 +23,36 @@ class _ServiceReviewsServiceState extends State<ReviewsService> {
           itemCount: data.length,
           itemBuilder: (BuildContext context, int index) {
             final lesson = data[index];
-            // final lesson = ModelUpcomingLesson.fromDocument(doc);
+
             return Padding(
               padding: const EdgeInsets.all(4.0),
-              child: Single_prod(
-                tutor: lesson,
-                tutorId: lesson.docId,
-              ),
+              child: SingleLesson(lesson: lesson),
             );
           }),
     );
   }
 }
 
-class Single_prod extends StatelessWidget {
-  final Student tutor;
-  final String tutorId;
+class SingleLesson extends StatelessWidget {
+  final Student lesson;
+  //final String lessonId;
+//how a lesson looks
+  SingleLesson({required this.lesson});
 
-  Single_prod({required this.tutorId, required this.tutor});
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.grey,
-        child: Card(
-          child: Material(
-            child: InkWell(
-              child: ListTile(
-                leading: CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(tutor.avatar),
-                ),
-                title: Text(
-                  tutor.name,
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
-                subtitle: Text(
-                  tutor.bio,
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
-                trailing: Text(
-                  "\$${tutor.price}/hr",
-                  style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
-              ),
-            ),
+      height: 150,
+      color: Colors.lightBlue,
+      child: Column(
+        children: <Widget>[
+          Text(
+            "Student's name: ${lesson.email} ",
+            style:
+                TextStyle(height: 5, fontSize: 15, fontWeight: FontWeight.bold),
           ),
-        ));
+        ],
+      ),
+    );
   }
 }

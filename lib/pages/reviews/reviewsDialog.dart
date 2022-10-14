@@ -29,15 +29,15 @@ class _ReviewsDialogState extends State<ReviewsDialog> {
               allowHalfRating: false,
               onRatingChanged: (v) {
                 rating = v;
+
                 setState(() {});
               },
               starCount: 5,
               rating: rating,
               size: 40.0,
-              filledIconData: Icons.blur_off,
               halfFilledIconData: Icons.blur_on,
-              color: Colors.green,
-              borderColor: Colors.green,
+              color: Colors.yellow,
+              borderColor: Colors.yellow,
               spacing: 0.0),
           const Text(
             "Write Review",
@@ -82,6 +82,7 @@ class _ReviewsDialogState extends State<ReviewsDialog> {
                 json["uid"] = currentUId;
                 json["email"] = email;
                 json["userImage"] = userImage;
+
                 final result = await reviewRef
                     .doc(widget.tutorId)
                     .collection("userReviews")
