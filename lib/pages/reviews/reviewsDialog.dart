@@ -44,7 +44,7 @@ class _ReviewsDialogState extends State<ReviewsDialog> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Container(
-              margin: EdgeInsets.all(20),
+              margin: EdgeInsets.all(5.0),
               child: TextField(
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
@@ -62,37 +62,51 @@ class _ReviewsDialogState extends State<ReviewsDialog> {
                   });
                 },
               )),
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: StadiumBorder(),
-                onPrimary: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              ),
-              child: Text('Submit'),
-              onPressed: () async {
-                final CollectionReference reviewRef =
-                    FirebaseFirestore.instance.collection("reviews");
-                String? currentUId = FirebaseAuth.instance.currentUser?.uid;
-                String? email = FirebaseAuth.instance.currentUser?.email;
-                String? userImage = FirebaseAuth.instance.currentUser?.photoURL;
-                Map<String, dynamic> json = {};
-                json["rating"] = rating;
-                json["response"] = input;
+          Row(children: [
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                  onPrimary: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                ),
+                child: Text('Cancel'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                }),
+            const SizedBox(width: 24),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                  onPrimary: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                ),
+                child: Text('Submit'),
+                onPressed: () async {
+                  final CollectionReference reviewRef =
+                      FirebaseFirestore.instance.collection("reviews");
+                  String? currentUId = FirebaseAuth.instance.currentUser?.uid;
+                  String? email = FirebaseAuth.instance.currentUser?.email;
+                  String? userImage =
+                      FirebaseAuth.instance.currentUser?.photoURL;
+                  Map<String, dynamic> json = {};
+                  json["rating"] = rating;
+                  json["response"] = input;
 
-                json["uid"] = currentUId;
-                json["email"] = email;
-                json["userImage"] = userImage;
-
-                final result = await reviewRef
-                    .doc(widget.tutorId)
-                    .collection("userReviews")
-                    .add(json);
-                Navigator.of(context).pop();
-                // Push to Firebase
-                // Reviews collection
-                // Document Key is tutorid.
-                // Add to reviews list if it exists for that key
-              })
+                  json["uid"] = currentUId;
+                  json["email"] = email;
+                  json["userImage"] = userImage;
+                  // json["datePosted"] = datePosted;
+                  final result = await reviewRef
+                      .doc(widget.tutorId)
+                      .collection("userReviews")
+                      .add(json);
+                  Navigator.of(context).pop();
+                  // Push to Firebase
+                  // Reviews collection
+                  // Document Key is tutorid.
+                  // Add to reviews list if it exists for that key
+                })
+          ])
         ],
       ),
     ));

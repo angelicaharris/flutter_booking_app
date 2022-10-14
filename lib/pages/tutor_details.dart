@@ -11,10 +11,8 @@ import 'package:flutter_booking_app/models/tutor.dart';
 import 'package:flutter_booking_app/pages/booking_dialog.dart';
 
 import 'package:flutter_booking_app/pages/home.dart';
-import 'package:flutter_booking_app/pages/reviews/demoReviews.dart';
 import 'package:flutter_booking_app/pages/reviews/reviewsDialog.dart';
-import 'package:flutter_booking_app/pages/reviews/reviewsList.dart';
-import 'package:flutter_booking_app/pages/reviews/reviewsService.dart';
+
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 import 'package:flutter_booking_app/services/serviceUpLessons.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -32,34 +30,31 @@ class ProductDetails extends StatefulWidget {
 }
 
 class ProductDetailsState extends State<ProductDetails> {
-  final StreamController<List<ModelUpcomingLesson>> _modelUpcomingLesson =
-      StreamController.broadcast();
-  Stream<List<ModelUpcomingLesson>> get modelUpcomingLesson =>
-      _modelUpcomingLesson.stream;
-
-  void getLessons() {
+  double rating = 0.0;
+  double checking = 0.0;
+  QuerySnapshot? usersSnap;
+  getRating() {
     final db = FirebaseFirestore.instance;
-    final User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser == null) {
-      return;
-    }
+    int counter = 0;
 
     db
-        .collection("tutors")
-        .doc(currentUser.uid)
-        .collection("bookings")
+        .collection("reviews")
+        .doc(widget.tutorId)
+        .collection('userReviews')
+        .where('rating', isGreaterThan: 0)
         .get()
         .then(
       (res) {
-        print("Error completing: ${res.docs.length}");
-        res.docs.forEach((element) {
-          print("Error completing: ${element.data()}");
-        });
-        final docs = res.docs
-            .map((e) => ModelUpcomingLesson.fromDocument(e.data()))
-            .toList();
-        // parse data to our model //
-        _modelUpcomingLesson.sink.add(docs);
+        usersSnap = res;
+        counter = res.docs.length;
+        var values = res.docs.map((doc) => doc['rating'] as double);
+        var sum = values.fold<double>(0.0, (a, b) => a + b);
+        // update ui
+        if (counter == 0) {
+          counter = 1;
+        }
+        rating = sum / counter.toDouble();
+        setState(() {});
       },
       onError: (e) => print("Error completing: $e"),
     );
@@ -81,7 +76,7 @@ class ProductDetailsState extends State<ProductDetails> {
           .showSnackBar(SnackBar(content: Text(error.toString())));
     });
     super.initState();
-    getLessons();
+    getRating();
   }
 
   @override
@@ -151,15 +146,35 @@ class ProductDetailsState extends State<ProductDetails> {
                     'About',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
                   Text(
                     widget.tutor.bio,
                     style: TextStyle(fontSize: 16, height: 1.4),
+                  ),
+                  const Divider(
+                    height: 15,
+                    thickness: .5,
+                    indent: 10,
+                    endIndent: 0,
+                    color: Colors.black,
                   ),
                   Text(
                     "Price: \$" + widget.tutor.price,
                     style: TextStyle(fontSize: 16, height: 1.4),
                   ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Ratings',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SmoothStarRating(
+                      allowHalfRating: false,
+                      starCount: 5,
+                      rating: rating,
+                      size: 40.0,
+                      halfFilledIconData: Icons.star_half,
+                      color: Colors.yellow,
+                      borderColor: Colors.yellow,
+                      spacing: 0.0),
                   const SizedBox(height: 16),
                   Text(
                     'Reviews',
@@ -174,7 +189,7 @@ class ProductDetailsState extends State<ProductDetails> {
                       shape: StadiumBorder(),
                       onPrimary: Colors.white,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                          EdgeInsets.symmetric(horizontal: 32, vertical: 5),
                     ),
                     child: Text('Post a Review'),
                     onPressed: () {
@@ -188,26 +203,61 @@ class ProductDetailsState extends State<ProductDetails> {
                           });
                     })),
             const SizedBox(height: 24),
-            Center(
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(),
-                      onPrimary: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                    ),
-                    child: Text('Read Reviews'),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  new DemoReviews(tutorId: widget.tutorId)));
-                    })),
-            /* Flexible(
-                child: reviewsList!.isNotEmpty
-                    ? ReviewsList(reviewsList: reviewsList)
-                    : Text("No Reviews")),*/
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('reviews')
+                    .doc(widget.tutorId)
+                    .collection('userReviews')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView(
+                    shrinkWrap: true,
+                    children:
+                        (snapshot.data! as QuerySnapshot).docs.map((document) {
+                      return Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 1.2,
+                          height: MediaQuery.of(context).size.height / 6,
+                          child: Card(
+                            child: Material(
+                              child: InkWell(
+                                child: ListTile(
+                                  title: Text(
+                                    document["email"],
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
+                                  ),
+                                  subtitle: Text(
+                                    document["response"],
+                                    style: TextStyle(
+                                        fontSize: 15, color: Colors.grey),
+                                  ),
+                                  trailing: SmoothStarRating(
+                                      allowHalfRating: false,
+                                      starCount: 5,
+                                      rating: document["rating"],
+                                      size: 40.0,
+                                      halfFilledIconData: Icons.blur_on,
+                                      color: Colors.yellow,
+                                      borderColor: Colors.yellow,
+                                      spacing: 0.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }),
           ],
         ),
       ),
