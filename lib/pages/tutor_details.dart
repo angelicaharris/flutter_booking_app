@@ -32,6 +32,8 @@ class ProductDetails extends StatefulWidget {
 class ProductDetailsState extends State<ProductDetails> {
   double rating = 0.0;
   double checking = 0.0;
+  String text = "";
+
   QuerySnapshot? usersSnap;
   getRating() {
     final db = FirebaseFirestore.instance;
@@ -77,6 +79,9 @@ class ProductDetailsState extends State<ProductDetails> {
     });
     super.initState();
     getRating();
+    for (var element in widget.tutor.interests.keys) {
+      text += element + "\n";
+    }
   }
 
   @override
@@ -156,6 +161,10 @@ class ProductDetailsState extends State<ProductDetails> {
                     indent: 10,
                     endIndent: 0,
                     color: Colors.black,
+                  ),
+                  Text(
+                    text,
+                    style: TextStyle(fontSize: 16, height: 1.4),
                   ),
                   Text(
                     "Price: \$" + widget.tutor.price,

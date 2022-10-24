@@ -67,32 +67,32 @@ class _UpCominngLessonsState extends State<UpCominngLessons> {
         elevation: 0.1,
         backgroundColor: Colors.red,
         title: Text('Upcoming Lessons'),
-        actions: <Widget>[],
+        actions: <Widget>[
+          Container(
+            width: 50,
+            height: 30,
+            child: Stack(children: []),
+          )
+        ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 16.0),
         child: new ListView(children: <Widget>[
-          Center(
-            child: Text(
-              "Welcome to GeeksforGeeks!!!",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 40.0,
+          Expanded(
+            child: SizedBox(
+              height: 200.0,
+              child: StreamBuilder<List<ModelUpcomingLesson>>(
+                stream: modelUpcomingLesson,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<ModelUpcomingLesson>> snapshot) {
+                  if (snapshot.hasError) {
+                    print("error occurred");
+                  }
+                  return ServiceUpLessons(
+                    upcomingLessonList: snapshot.data,
+                  );
+                },
               ),
-            ),
-          ),
-          Center(
-            child: StreamBuilder<List<ModelUpcomingLesson>>(
-              stream: modelUpcomingLesson,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<ModelUpcomingLesson>> snapshot) {
-                if (snapshot.hasError) {
-                  print("error occurred");
-                }
-                return ServiceUpLessons(
-                  upcomingLessonList: snapshot.data,
-                );
-              },
             ),
           ),
         ]),
