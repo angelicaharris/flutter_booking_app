@@ -34,7 +34,86 @@ class _ServiceUpLessonsState extends State<ServiceUpLessons> {
   }
 }
 
-class SingleLesson extends StatelessWidget {
+class SingleLesson extends StatefulWidget {
+  final ModelUpcomingLesson lesson;
+  const SingleLesson({super.key, required this.lesson});
+
+  @override
+  State<SingleLesson> createState() => _SingleLessonState();
+}
+
+class _SingleLessonState extends State<SingleLesson> {
+  @override
+  Widget build(BuildContext context) {
+    final dateFormat = DateFormat("MM-dd-yyyy hh:mm");
+    final formattedDate = dateFormat
+        .format(DateTime.fromMicrosecondsSinceEpoch(widget.lesson.date * 1000));
+    return Container(
+      height: 200,
+      color: Colors.lightBlue,
+      child: Column(
+        children: <Widget>[
+          Text(
+            "Student's name: ${widget.lesson.email} ",
+            style:
+                TextStyle(height: 5, fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            "Date: $formattedDate",
+            style:
+                TextStyle(height: 1, fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            "Lesson Type: ${widget.lesson.lessonType}",
+            style:
+                TextStyle(height: 1, fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            "Duration: ${widget.lesson.duration}",
+            style:
+                TextStyle(height: 1, fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          new Center(
+            child: new ButtonBar(
+              mainAxisSize: MainAxisSize
+                  .min, // this will take space as minimum as posible(to center)
+              children: <Widget>[
+                new ElevatedButton(
+                  child: new Text('Accept'),
+                  onPressed: null,
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.green)),
+                ),
+                new ElevatedButton(
+                  child: new Text('Decline'),
+                  onPressed: () {
+                    final docUser = FirebaseFirestore.instance
+                        .collection("tutors")
+                        .doc(FirebaseAuth.instance.currentUser?.uid)
+                        .collection("bookings")
+                        .doc(widget.lesson.lessonId);
+
+                    docUser.delete().whenComplete(() => Navigator.pop(context));
+
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            'You have successfully delected lesson request')));
+                  },
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/*
+
+class SingleLesson extends StatefulWidget {
   final ModelUpcomingLesson lesson;
 
   SingleLesson({required this.lesson});
@@ -106,4 +185,5 @@ class SingleLesson extends StatelessWidget {
       ),
     );
   }
-}
+  */
+
