@@ -77,7 +77,7 @@ class _UpCominngLessonsState extends State<UpCominngLessons> {
             if (snapshot.hasError) {
               print("error occurred");
             }
-
+            getLessons();
             return ServiceUpLessons(upcomingLessonList: snapshot.data);
           },
         ));

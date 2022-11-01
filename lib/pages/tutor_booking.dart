@@ -7,9 +7,18 @@ class TutorBooking {
   String lessonType;
   List<String> subject;
   String lessonId;
+  bool lessonConfirmed;
 
-  TutorBooking(this.studentId, this.name, this.email, this.startDateTime,
-      this.duration, this.lessonType, this.subject, this.lessonId);
+  TutorBooking(
+      this.studentId,
+      this.name,
+      this.email,
+      this.startDateTime,
+      this.duration,
+      this.lessonType,
+      this.subject,
+      this.lessonId,
+      this.lessonConfirmed);
 
   static TutorBooking fromJson(Map<String, dynamic> json) {
     return TutorBooking(
@@ -20,7 +29,8 @@ class TutorBooking {
         json["duration"],
         json['lessonType'],
         json["subjectNames"],
-        json["lessonId"]);
+        json["lessonId"],
+        json["lessonConfirmed"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -33,6 +43,7 @@ class TutorBooking {
     json["lessonType"] = lessonType;
     json["subjectNames"] = subject;
     json["lessonId"] = lessonId;
+    json["lessonConfirmed"] = lessonConfirmed;
     return json;
   }
 }

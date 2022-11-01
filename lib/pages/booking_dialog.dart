@@ -109,7 +109,8 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
                         durationValues,
                         _lessonType,
                         ["Maths/Sample"],
-                        ""));
+                        "",
+                        false));
               },
               icon: const Icon(Icons.send),
               label: const Text('Send Request'),

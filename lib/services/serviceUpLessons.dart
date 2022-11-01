@@ -18,7 +18,6 @@ class _ServiceUpLessonsState extends State<ServiceUpLessons> {
   @override
   Widget build(BuildContext context) {
     final data = widget.upcomingLessonList ?? [];
-    //if (data == null) return CircularProgressIndicator();
     return Container(
       child: ListView.builder(
           shrinkWrap: true,
@@ -74,116 +73,75 @@ class _SingleLessonState extends State<SingleLesson> {
                 TextStyle(height: 1, fontSize: 15, fontWeight: FontWeight.bold),
           ),
           new Center(
-            child: new ButtonBar(
-              mainAxisSize: MainAxisSize
-                  .min, // this will take space as minimum as posible(to center)
-              children: <Widget>[
-                new ElevatedButton(
-                  child: new Text('Accept'),
-                  onPressed: null,
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.green)),
-                ),
-                new ElevatedButton(
-                  child: new Text('Decline'),
-                  onPressed: () {
-                    final docUser = FirebaseFirestore.instance
-                        .collection("tutors")
-                        .doc(FirebaseAuth.instance.currentUser?.uid)
-                        .collection("bookings")
-                        .doc(widget.lesson.lessonId);
+            child: widget.lesson.lessonConfirmed == false
+                ? ButtonBar(
+                    mainAxisSize: MainAxisSize
+                        .min, // this will take space as minimum as posible(to center)
+                    children: <Widget>[
+                      new ElevatedButton(
+                        child: new Text('Accept'),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.green)),
+                        onPressed: () {
+                          final docUser = FirebaseFirestore.instance
+                              .collection("tutors")
+                              .doc(FirebaseAuth.instance.currentUser?.uid)
+                              .collection("bookings")
+                              .doc(widget.lesson.lessonId);
 
-                    docUser.delete().whenComplete(() => Navigator.pop(context));
+                          docUser.update({"lessonConfirmed": true});
 
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                            'You have successfully delected lesson request')));
-                  },
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.red)),
-                ),
-              ],
-            ),
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Lesson Request Confirmed')));
+                        },
+                      ),
+                      new ElevatedButton(
+                          child: new Text('Decline'),
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.red)),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Delete'),
+                                  content:
+                                      Text('Are you sure you want to delete?'),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('Cancel')),
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          final docUser = FirebaseFirestore
+                                              .instance
+                                              .collection("tutors")
+                                              .doc(FirebaseAuth
+                                                  .instance.currentUser?.uid)
+                                              .collection("bookings")
+                                              .doc(widget.lesson.lessonId);
+
+                                          docUser.delete().whenComplete(() {
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        child: Text('Delete'))
+                                  ],
+                                );
+                              },
+                            );
+                          }),
+                    ],
+                  )
+                : Text(''),
           ),
         ],
       ),
     );
   }
 }
-
-/*
-
-class SingleLesson extends StatefulWidget {
-  final ModelUpcomingLesson lesson;
-
-  SingleLesson({required this.lesson});
-
-  @override
-  Widget build(BuildContext context) {
-    String subjectNames = "";
-    for (var element in lesson.subjectNames ?? []) {
-      // ["hello", "world"] -> "hello, world"
-      subjectNames += "$element,";
-    }
-    final dateFormat = DateFormat("MM-dd-yyyy hh:mm");
-    final formattedDate = dateFormat
-        .format(DateTime.fromMicrosecondsSinceEpoch(lesson.date * 1000));
-    return Container(
-      height: 200,
-      color: Colors.lightBlue,
-      child: Column(
-        children: <Widget>[
-          Text(
-            "Student's name: ${lesson.email} ",
-            style:
-                TextStyle(height: 5, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            "Date: $formattedDate",
-            style:
-                TextStyle(height: 1, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            "Lesson Type: ${lesson.lessonType}",
-            style:
-                TextStyle(height: 1, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            "Duration: ${lesson.duration}",
-            style:
-                TextStyle(height: 1, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          new Center(
-            child: new ButtonBar(
-              mainAxisSize: MainAxisSize
-                  .min, // this will take space as minimum as posible(to center)
-              children: <Widget>[
-                new ElevatedButton(
-                  child: new Text('Accept'),
-                  onPressed: null,
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.green)),
-                ),
-                new ElevatedButton(
-                  child: new Text('Decline'),
-                  onPressed: () {
-                    final docUser = FirebaseFirestore.instance
-                        .collection("tutors")
-                        .doc(FirebaseAuth.instance.currentUser?.uid)
-                        .collection("bookings")
-                        .doc(lesson.lessonId);
-
-                    docUser.delete();
-                  },
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.red)),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  */
-
