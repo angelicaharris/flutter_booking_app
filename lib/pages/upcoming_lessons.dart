@@ -35,6 +35,7 @@ class _UpCominngLessonsState extends State<UpCominngLessons> {
         .collection("tutors")
         .doc(currentUser.uid)
         .collection("bookings")
+        .orderBy('startDateTime')
         .get()
         .then(
       (res) {
@@ -63,40 +64,22 @@ class _UpCominngLessonsState extends State<UpCominngLessons> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        elevation: 0.1,
-        backgroundColor: Colors.red,
-        title: Text('Upcoming Lessons'),
-        actions: <Widget>[
-          Container(
-            width: 50,
-            height: 30,
-            child: Stack(children: []),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 16.0),
-        child: new ListView(children: <Widget>[
-          Expanded(
-            child: SizedBox(
-              height: 200.0,
-              child: StreamBuilder<List<ModelUpcomingLesson>>(
-                stream: modelUpcomingLesson,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<ModelUpcomingLesson>> snapshot) {
-                  if (snapshot.hasError) {
-                    print("error occurred");
-                  }
-                  return ServiceUpLessons(
-                    upcomingLessonList: snapshot.data,
-                  );
-                },
-              ),
-            ),
-          ),
-        ]),
-      ),
-    );
+        appBar: new AppBar(
+          elevation: 0.1,
+          backgroundColor: Colors.blueGrey,
+          title: Text('Upcoming Lessons'),
+          actions: <Widget>[],
+        ),
+        body: StreamBuilder<List<ModelUpcomingLesson>>(
+          stream: modelUpcomingLesson,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<ModelUpcomingLesson>> snapshot) {
+            if (snapshot.hasError) {
+              print("error occurred");
+            }
+
+            return ServiceUpLessons(upcomingLessonList: snapshot.data);
+          },
+        ));
   }
 }

@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 //my own imports
 import 'package:flutter_booking_app/models/modelUpLesson.dart';
+import 'package:flutter_booking_app/pages/chats/model/user.dart';
 import 'package:intl/intl.dart';
 
 class ServiceUpLessons extends StatefulWidget {
-  const ServiceUpLessons({Key? key, this.upcomingLessonList}) : super(key: key);
+  ServiceUpLessons({Key? key, this.upcomingLessonList}) : super(key: key);
   final List<ModelUpcomingLesson>? upcomingLessonList;
   @override
   State<ServiceUpLessons> createState() => _ServiceUpLessonsState();
@@ -22,7 +25,6 @@ class _ServiceUpLessonsState extends State<ServiceUpLessons> {
           itemCount: data.length,
           itemBuilder: (BuildContext context, int index) {
             final lesson = data[index];
-            // final lesson = ModelUpcomingLesson.fromDocument(doc);
             return Padding(
               padding: const EdgeInsets.all(4.0),
               child: SingleLesson(lesson: lesson),
@@ -34,8 +36,7 @@ class _ServiceUpLessonsState extends State<ServiceUpLessons> {
 
 class SingleLesson extends StatelessWidget {
   final ModelUpcomingLesson lesson;
-  //final String lessonId;
-//how a lesson looks
+
   SingleLesson({required this.lesson});
 
   @override
@@ -45,11 +46,11 @@ class SingleLesson extends StatelessWidget {
       // ["hello", "world"] -> "hello, world"
       subjectNames += "$element,";
     }
-    final dateFormat = DateFormat("yyyy-MM-dd hh:mm");
+    final dateFormat = DateFormat("MM-dd-yyyy hh:mm");
     final formattedDate = dateFormat
         .format(DateTime.fromMicrosecondsSinceEpoch(lesson.date * 1000));
     return Container(
-      height: 150,
+      height: 200,
       color: Colors.lightBlue,
       child: Column(
         children: <Widget>[
@@ -72,6 +73,34 @@ class SingleLesson extends StatelessWidget {
             "Duration: ${lesson.duration}",
             style:
                 TextStyle(height: 1, fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          new Center(
+            child: new ButtonBar(
+              mainAxisSize: MainAxisSize
+                  .min, // this will take space as minimum as posible(to center)
+              children: <Widget>[
+                new ElevatedButton(
+                  child: new Text('Accept'),
+                  onPressed: null,
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.green)),
+                ),
+                new ElevatedButton(
+                  child: new Text('Decline'),
+                  onPressed: () {
+                    final docUser = FirebaseFirestore.instance
+                        .collection("tutors")
+                        .doc(FirebaseAuth.instance.currentUser?.uid)
+                        .collection("bookings")
+                        .doc(lesson.lessonId);
+
+                    docUser.delete();
+                  },
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red)),
+                ),
+              ],
+            ),
           ),
         ],
       ),

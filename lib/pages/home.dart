@@ -6,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_booking_app/models/student.dart';
 import 'package:flutter_booking_app/pages/chats/chats_page.dart';
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
@@ -30,11 +31,16 @@ class _HomePageState extends State<HomePage> {
   String? email;
   String? interests;
   String? image_url;
+  String? userType;
   List<Tutor>? multiSelectListTutors;
   List<Tutor>? sliderListTutors;
-
   List<Tutor>? tutors;
   List<Tutor>? originalTutors;
+  List<Student>? multiSelectListStudents;
+  List<Student>? sliderListStudents;
+  List<Student>? students;
+  List<Student>? originalStudents;
+
   double _currentSliderValue = 20;
   final List<String> subjects = [
     'ACT English',
@@ -54,7 +60,6 @@ class _HomePageState extends State<HomePage> {
     if (FirebaseAuth.instance.currentUser != null) {
       userID = FirebaseAuth.instance.currentUser?.uid;
     }
-
     // Firestore - Get User Info using UserID
     final db = FirebaseFirestore.instance;
     final docRef = db.collection("users").doc(userID);
@@ -64,7 +69,6 @@ class _HomePageState extends State<HomePage> {
         if (doc.data() != null) {
           final data = doc.data() as Map<String, dynamic>;
           print("ProfileData => $data");
-          // ...
           name = data["name"];
           email = data["email"];
           String type = data["userType"];
@@ -90,6 +94,11 @@ class _HomePageState extends State<HomePage> {
           print("Successfully completed => $res}");
           // parse data to our model
           usersSnap = res;
+          students = res.docs.map((doc) => Student.fromDocument(doc)).toList();
+
+          originalStudents = students;
+          userType = 'Student';
+
           // update ui
           setState(() {});
         },
@@ -103,6 +112,7 @@ class _HomePageState extends State<HomePage> {
           tutors = res.docs.map((doc) => Tutor.fromDocument(doc)).toList();
 
           originalTutors = tutors;
+          userType = 'Tutor';
           // update ui
           setState(() {});
         },
@@ -454,11 +464,11 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           //<-----Listing the users on homepage ----->
-
-          Flexible(
-              child: Tutors(
-            tutorList: tutors,
-          )),
+          Flexible(child: Tutors(tutorList: tutors))
+          /* Container(
+              child: (userType == 'Student')
+                  ? Flexible(child: Tutors(tutorList: tutors))
+                  : Text('available students'))*/
         ],
       ),
     );

@@ -6,6 +6,7 @@ import 'package:flutter_booking_app/pages/tutor_booking.dart';
 import 'package:uuid/uuid.dart';
 
 class TutorDetailsViewModel {
+  String? lessonIdRetrieved;
   final StreamController<String> _bookNow = StreamController.broadcast();
   Stream<String> get bookNow => _bookNow.stream;
 
@@ -30,6 +31,14 @@ class TutorDetailsViewModel {
           .collection("bookings")
           .add(bookingRequest.toJson());
       _bookNow.sink.add("Successfully booked!");
+
+      FirebaseFirestore.instance
+          .collection('tutors')
+          .doc(tutorId)
+          .collection('bookings')
+          .doc(result.id)
+          .update({'lessonId': result.id});
+      print("lesson ID HERE,  {$bookingRequest.lessonId}");
     } catch (msg, trace) {
       _bookNow.sink.addError("An error occurred while...");
     }

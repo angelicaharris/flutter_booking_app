@@ -7,6 +7,7 @@ class ModelUpcomingLesson {
   final String lessonType;
   final int date;
   final List<dynamic>? subjectNames;
+  final String lessonId;
 
   ModelUpcomingLesson(
       {this.name,
@@ -14,7 +15,8 @@ class ModelUpcomingLesson {
       required this.duration,
       required this.lessonType,
       required this.date,
-      this.subjectNames});
+      this.subjectNames,
+      required this.lessonId});
 
   factory ModelUpcomingLesson.fromDocument(Map<String, dynamic> doc) {
     return ModelUpcomingLesson(
@@ -23,6 +25,7 @@ class ModelUpcomingLesson {
         duration: doc['duration'],
         lessonType: doc['lessonType'],
         date: doc['startDateTime'],
-        subjectNames: doc['subjectNames']);
+        subjectNames: doc['subjectNames'],
+        lessonId: doc['lessonId']);
   }
 }

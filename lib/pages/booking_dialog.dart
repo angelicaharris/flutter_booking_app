@@ -108,7 +108,8 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
                         startTimeInMillis,
                         durationValues,
                         _lessonType,
-                        ["Maths/Sample"]));
+                        ["Maths/Sample"],
+                        ""));
               },
               icon: const Icon(Icons.send),
               label: const Text('Send Request'),
@@ -142,7 +143,7 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
           },
           child: Text(selectedDate == null
               ? startDate
-              : "${selectedDate?.day}/${selectedDate?.month}/${selectedDate?.year}"),
+              : "${selectedDate?.month}/${selectedDate?.day}/${selectedDate?.year}"),
         )
       ],
     );
