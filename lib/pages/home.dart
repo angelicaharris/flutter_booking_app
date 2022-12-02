@@ -129,9 +129,19 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
 
     getCurrentUser();
+
+    //<----------- Firestore SECURITY RULE -------------->
+    /* final userData = {"name": "Ash", "userType": "Tutor"};
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc("{userId}")
+        .set(userData)
+        .onError((e, _) => print("Error writing document: $e"));*/
   }
 
 //<----- toggle button declaration for  ---->
@@ -174,38 +184,7 @@ class _HomePageState extends State<HomePage> {
           Container(
             width: 50,
             height: 30,
-            child: Stack(
-              children: [
-                /*  Icon(
-                  Icons.notifications,
-                  color: Colors.white,
-                  size: 30,
-                ),
-                Container(
-                  width: 30,
-                  height: 30,
-                  alignment: Alignment.topRight,
-                  margin: EdgeInsets.only(top: 5),
-                  child: Container(
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xffc32c37),
-                        border: Border.all(color: Colors.white, width: 1)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: Center(
-                        child: Text(
-                          '3',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),*/
-              ],
-            ),
+            child: Stack(),
           ),
         ],
       ),
@@ -470,6 +449,7 @@ class _HomePageState extends State<HomePage> {
           ),
           //<-----Listing the users on homepage ----->
           Flexible(child: Tutors(tutorList: tutors))
+
           /* Container(
               child: (userType == 'Student')
                   ? Flexible(child: Tutors(tutorList: tutors))
