@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_booking_app/pages/chats/model/message.dart';
-import 'package:flutter_booking_app/pages/chats/model/user.dart';
-import 'package:flutter_booking_app/utils/transform_utils.dart';
+import 'package:flutter_booking_app/chat/data.dart';
+import 'package:flutter_booking_app/chat/model/message.dart';
+import 'package:flutter_booking_app/chat/model/user.dart';
+
+import '../utils.dart';
 
 class FirebaseApi {
   static Stream<List<User>> getUsers() => FirebaseFirestore.instance
       .collection('users')
-      .where('userType', isEqualTo: 'Tutor')
+      .orderBy(UserField.lastMessageTime, descending: true)
       .snapshots()
       .transform(Utils.transformer(User.fromJson));
 
@@ -15,25 +17,24 @@ class FirebaseApi {
         FirebaseFirestore.instance.collection('chats/$idUser/messages');
 
     final newMessage = Message(
-      //idUser: myId,
-      idUser: idUser,
-      urlAvatar: '',
-      username: '',
+      idUser: idUser, //myId
+      urlAvatar: myUrlAvatar,
+      username: myUsername,
       message: message,
-      // createdAt: DateTime.now(),
+      createdAt: DateTime.now(),
     );
     await refMessages.add(newMessage.toJson());
 
     final refUsers = FirebaseFirestore.instance.collection('users');
-    /*  await refUsers
+    await refUsers
         .doc(idUser)
-        .update({UserField.lastMessageTime: DateTime.now()});*/
+        .update({UserField.lastMessageTime: DateTime.now()});
   }
 
   static Stream<List<Message>> getMessages(String idUser) =>
       FirebaseFirestore.instance
           .collection('chats/$idUser/messages')
-          //  .orderBy(MessageField.createdAt, descending: true)
+          .orderBy(MessageField.createdAt, descending: true)
           .snapshots()
           .transform(Utils.transformer(Message.fromJson));
 
@@ -46,11 +47,7 @@ class FirebaseApi {
     } else {
       for (final user in users) {
         final userDoc = refUsers.doc();
-        final newUser = user.copyWith(
-          idUser: userDoc.id,
-          name: '',
-          urlAvatar: '',
-        );
+        final newUser = user.copyWith(idUser: userDoc.id);
 
         await userDoc.set(newUser.toJson());
       }

@@ -1,13 +1,14 @@
+import 'package:flutter_booking_app/chat/model/user.dart';
+import 'package:flutter_booking_app/chat/page/chat_page.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter_booking_app/pages/chats/model/user.dart';
 
 class ChatHeaderWidget extends StatelessWidget {
   final List<User> users;
 
   const ChatHeaderWidget({
+    super.key,
     required this.users,
-  }) : super();
+  });
 
   @override
   Widget build(BuildContext context) => Container(
@@ -47,7 +48,11 @@ class ChatHeaderWidget extends StatelessWidget {
                     return Container(
                       margin: const EdgeInsets.only(right: 12),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ChatPage(user: users[index]),
+                          ));
+                        },
                         child: CircleAvatar(
                           radius: 24,
                           backgroundImage: NetworkImage(user.urlAvatar),

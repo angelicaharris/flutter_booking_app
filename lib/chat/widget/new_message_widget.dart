@@ -1,4 +1,4 @@
-import 'package:flutter_booking_app/api/firebase_api.dart';
+import 'package:flutter_booking_app/chat/api/firebase_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -6,8 +6,9 @@ class NewMessageWidget extends StatefulWidget {
   final String idUser;
 
   const NewMessageWidget({
+    super.key,
     required this.idUser,
-  }) : super();
+  });
 
   @override
   _NewMessageWidgetState createState() => _NewMessageWidgetState();

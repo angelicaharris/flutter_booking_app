@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 //my own imports
 import 'package:flutter_booking_app/models/modelUpLesson.dart';
-import 'package:flutter_booking_app/pages/chats/model/user.dart';
+//import 'package:flutter_booking_app/pages/chats/model/user.dart';
 import 'package:intl/intl.dart';
 
 class ServiceUpLessons extends StatefulWidget {
@@ -107,9 +107,9 @@ class _SingleLessonState extends State<SingleLesson> {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Text('Delete'),
+                                  title: Text('Decline'),
                                   content:
-                                      Text('Are you sure you want to delete?'),
+                                      Text('Are you sure you want to decline?'),
                                   actions: [
                                     ElevatedButton(
                                         onPressed: () {
@@ -129,8 +129,12 @@ class _SingleLessonState extends State<SingleLesson> {
                                           docUser.delete().whenComplete(() {
                                             Navigator.pop(context);
                                           });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      'Lesson Request Successfully Declined')));
                                         },
-                                        child: Text('Delete'))
+                                        child: Text('Decline')),
                                   ],
                                 );
                               },

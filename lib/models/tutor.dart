@@ -19,15 +19,15 @@ class Tutor {
       required this.avatar,
       required this.docId});
 
-  factory Tutor.fromDocument(DocumentSnapshot doc) {
+  factory Tutor.fromDocument(Map doc, String id) {
     return Tutor(
-      name: doc['name'],
-      email: doc['email'],
-      price: priceFromDoc(doc),
-      bio: doc['bio'],
-      docId: doc.id,
-      avatar: doc['imageUrl'],
-      interests: doc['interests'],
+      name: doc['name'] ?? 'Missing',
+      email: doc['email'] ?? 'Missing',
+      price: doc['price'] ?? 'Missing',
+      bio: doc['bio'] ?? 'Missing',
+      docId: id,
+      avatar: doc['imageUrl'] ?? 'Missing',
+      interests: doc['interests'] ?? 'Missing',
     );
   }
 }

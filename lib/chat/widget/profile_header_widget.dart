@@ -4,8 +4,9 @@ class ProfileHeaderWidget extends StatelessWidget {
   final String name;
 
   const ProfileHeaderWidget({
+    super.key,
     required this.name,
-  }) : super();
+  });
 
   @override
   Widget build(BuildContext context) => Container(

@@ -1,15 +1,16 @@
+import 'package:flutter_booking_app/chat/model/user.dart';
+import 'package:flutter_booking_app/chat/widget/messages_widget.dart';
+import 'package:flutter_booking_app/chat/widget/new_message_widget.dart';
+import 'package:flutter_booking_app/chat/widget/profile_header_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_booking_app/pages/chats/model/user.dart';
-import 'package:flutter_booking_app/pages/chats/widgets/messages_widget.dart';
-import 'package:flutter_booking_app/pages/chats/widgets/new_message_widget.dart';
-import 'package:flutter_booking_app/pages/chats/widgets/profile_header_widget.dart';
 
 class ChatPage extends StatefulWidget {
   final User user;
 
   const ChatPage({
+    super.key,
     required this.user,
-  }) : super();
+  });
 
   @override
   _ChatPageState createState() => _ChatPageState();

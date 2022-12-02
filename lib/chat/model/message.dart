@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_booking_app/utils/transform_utils.dart';
+import '../utils.dart';
 
 class MessageField {
-  // static final String createdAt = 'createdAt';
+  static final String createdAt = 'createdAt';
 }
 
 class Message {
-  final String? idUser;
-  final String? urlAvatar;
-  final String? username;
-  final String? message;
-  // final DateTime createdAt;
+  final String idUser;
+  final String urlAvatar;
+  final String username;
+  final String message;
+  final DateTime createdAt;
 
-  Message({
+  const Message({
     required this.idUser,
     required this.urlAvatar,
     required this.username,
     required this.message,
-    // required this.createdAt,
+    required this.createdAt,
   });
 
   static Message fromJson(Map<String, dynamic> json) => Message(
@@ -26,7 +26,7 @@ class Message {
         urlAvatar: json['urlAvatar'],
         username: json['username'],
         message: json['message'],
-        // createdAt: Utils.toDateTime(json['createdAt']),
+        createdAt: Utils.toDateTime(json['createdAt']) as DateTime,
       );
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +34,6 @@ class Message {
         'urlAvatar': urlAvatar,
         'username': username,
         'message': message,
-        //  'createdAt': Utils.fromDateTimeToJson(createdAt),
+        'createdAt': Utils.fromDateTimeToJson(createdAt),
       };
 }

@@ -1,14 +1,14 @@
-import 'package:flutter_booking_app/pages/chats/chat_page.dart';
-import 'package:flutter_booking_app/pages/chats/model/user.dart';
-import 'package:flutter_booking_app/pages/chats/chats_page.dart';
+import 'package:flutter_booking_app/chat/model/user.dart';
+import 'package:flutter_booking_app/chat/page/chat_page.dart';
 import 'package:flutter/material.dart';
 
 class ChatBodyWidget extends StatelessWidget {
   final List<User> users;
 
   const ChatBodyWidget({
+    super.key,
     required this.users,
-  }) : super();
+  });
 
   @override
   Widget build(BuildContext context) => Expanded(

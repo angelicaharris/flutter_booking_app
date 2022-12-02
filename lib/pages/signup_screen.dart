@@ -271,23 +271,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   //   return;
                   // }
 
-                  final ref = FirebaseStorage.instance
-                      .ref()
-                      .child('usersImages')
-                      .child(_userNameTextController.text + '.jpg');
-                  await ref.putFile(_pickedImage!);
-                  image_url = await ref.getDownloadURL();
-
                   print("_pickedImage => $_pickedImage");
 
                   _auth
                       .createUserWithEmailAndPassword(
                           email: _emailTextController.text,
                           password: _passwordTextController.text)
-                      .then((userCredential) {
+                      .then((userCredential) async {
                     print("Created New Account");
                     final userId = userCredential.user!.uid;
-
+                    final ref = FirebaseStorage.instance
+                        .ref()
+                        .child('usersImages')
+                        .child(userId)
+                        .child(_userNameTextController.text + '.jpg');
+                    await ref.putFile(_pickedImage!);
+                    image_url = await ref.getDownloadURL();
                     print("$image_url");
                     _createUser(userId, _userNameTextController.text,
                         _emailTextController.text, userType, image_url ?? "");

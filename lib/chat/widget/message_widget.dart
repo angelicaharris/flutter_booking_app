@@ -1,4 +1,4 @@
-import 'package:flutter_booking_app/pages/chats/model/message.dart';
+import 'package:flutter_booking_app/chat/model/message.dart';
 import 'package:flutter/material.dart';
 
 class MessageWidget extends StatelessWidget {
@@ -20,8 +20,7 @@ class MessageWidget extends StatelessWidget {
       children: <Widget>[
         if (!isMe)
           CircleAvatar(
-              radius: 16,
-              backgroundImage: NetworkImage(message.urlAvatar ?? "")),
+              radius: 16, backgroundImage: NetworkImage(message.urlAvatar)),
         Container(
           padding: EdgeInsets.all(16),
           margin: EdgeInsets.all(16),
@@ -43,7 +42,7 @@ class MessageWidget extends StatelessWidget {
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            message.message ?? "",
+            message.message,
             style: TextStyle(color: isMe ? Colors.black : Colors.white),
             textAlign: isMe ? TextAlign.end : TextAlign.start,
           ),

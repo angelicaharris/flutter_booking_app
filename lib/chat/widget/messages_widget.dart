@@ -1,16 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_booking_app/chat/api/firebase_api.dart';
+import 'package:flutter_booking_app/chat/model/message.dart';
+import 'package:flutter_booking_app/chat/widget/message_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_booking_app/api/firebase_api.dart';
-import 'package:flutter_booking_app/pages/chats/model/message.dart';
-import 'package:flutter_booking_app/pages/chats/widgets/message_widget.dart';
-import 'package:flutter_booking_app/pages/chats/widgets/messages_widget.dart';
+
 import '../data.dart';
 
 class MessagesWidget extends StatelessWidget {
   final String idUser;
 
-  String? userID;
-  MessagesWidget({
+  const MessagesWidget({
+    super.key,
     required this.idUser,
   });
 
@@ -32,7 +31,7 @@ class MessagesWidget extends StatelessWidget {
                     : ListView.builder(
                         physics: BouncingScrollPhysics(),
                         reverse: true,
-                        itemCount: messages.length,
+                        itemCount: messages!.length,
                         itemBuilder: (context, index) {
                           final message = messages[index];
 

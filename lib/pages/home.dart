@@ -6,8 +6,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_booking_app/chat/page/chats_page.dart';
 import 'package:flutter_booking_app/models/student.dart';
-import 'package:flutter_booking_app/pages/chats/chats_page.dart';
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
 import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   ];
 
 // <--- Firebase get users from collection --->
-  getCurrentUser() {
+  getCurrentUser() async {
     // Fireabse Auth - get Authenticated User - UserID
     String? userID;
     if (FirebaseAuth.instance.currentUser != null) {
@@ -63,23 +63,20 @@ class _HomePageState extends State<HomePage> {
     // Firestore - Get User Info using UserID
     final db = FirebaseFirestore.instance;
     final docRef = db.collection("users").doc(userID);
-    docRef.get().then(
-      (DocumentSnapshot doc) {
-        // final data = doc.data();
-        if (doc.data() != null) {
-          final data = doc.data() as Map<String, dynamic>;
-          print("ProfileData => $data");
-          name = data["name"];
-          email = data["email"];
-          String type = data["userType"];
-          //  price = data["price"];
-          getUsers(type);
-          image_url = data["imageUrl"];
-          setState(() {});
-        }
-      },
-      onError: (e) => print("Error getting document: $e"),
-    );
+    final doc = await docRef.get();
+
+    // final data = doc.data();
+    if (doc.data() != null) {
+      final data = doc.data() as Map<String, dynamic>;
+      print("ProfileData => $data");
+      name = data["name"];
+      email = data["email"];
+      String type = data["userType"];
+      //  price = data["price"];
+      getUsers(type);
+      image_url = data["imageUrl"];
+      setState(() {});
+    }
   }
 
   QuerySnapshot? usersSnap;
@@ -89,12 +86,15 @@ class _HomePageState extends State<HomePage> {
   getUsers(String type) {
     final db = FirebaseFirestore.instance;
     if (type == 'Tutor') {
-      db.collection("users").where('userType', isEqualTo: 'Student').get().then(
-        (res) {
-          print("Successfully completed => $res}");
+      final userRef =
+          db.collection("users").where('userType', isEqualTo: 'Student');
+      userRef.snapshots().listen(
+        (event) {
+          print("Successfully completed => $event}");
           // parse data to our model
-          usersSnap = res;
-          students = res.docs.map((doc) => Student.fromDocument(doc)).toList();
+          usersSnap = event;
+          students =
+              event.docs.map((doc) => Student.fromDocument(doc)).toList();
 
           originalStudents = students;
           userType = 'Student';
@@ -105,11 +105,16 @@ class _HomePageState extends State<HomePage> {
         onError: (e) => print("Error completing: $e"),
       );
     } else {
-      db.collection("users").where('userType', isEqualTo: 'Tutor').get().then(
-        (res) {
+      final userRef =
+          db.collection("users").where('userType', isEqualTo: 'Tutor');
+      userRef.snapshots().listen(
+        (event) {
+          print(event);
           // parse data to our model
-          usersSnap = res; //
-          tutors = res.docs.map((doc) => Tutor.fromDocument(doc)).toList();
+          usersSnap = event; //
+          tutors = event.docs
+              .map((doc) => Tutor.fromDocument(doc.data(), doc.id))
+              .toList();
 
           originalTutors = tutors;
           userType = 'Tutor';

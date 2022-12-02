@@ -21,6 +21,8 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
   String startTimeValueMins = "00";
   String startTimeValueT = "PM";
   String durationValues = "30 mins";
+  String recurrenceValues = "Daily";
+  int repetitionValues = 0;
   String startDate = "No Date";
   static DateTime? selectedDate;
 
@@ -77,6 +79,14 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
             const SizedBox(
               height: 20,
             ),
+            _buildRecurrence(),
+            const SizedBox(
+              height: 20,
+            ),
+            _buildRepeat(),
+            const SizedBox(
+              height: 20,
+            ),
             _buildLessonType(),
             const SizedBox(
               height: 50,
@@ -90,27 +100,54 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
                       const SnackBar(content: Text("Some fields are missing")));
                   return;
                 }
+                // Need repeat information
+                final zeroRepeatTimes = 0;
+                final fourRepeatTimes = 4;
+                final sixRepeatTimes = 6;
+                final eightRepeatTimes = 8;
                 final year = selectedDate?.year.toInt();
                 final month = selectedDate?.month.toInt();
                 final day = selectedDate?.day.toInt();
                 final hour = int.tryParse(startTimeHour);
                 final mins = int.tryParse(startTimeValueMins);
+// formula. Loop "Repeat" times. Create booking request each time
+// while changing start time to be initial start time plus recurrence
+// times repeat times number of milliseconds in a Day
 
                 final startTimeInMillis =
                     DateTime(year!, month!, day!, hour!, mins!)
                         .millisecondsSinceEpoch;
-                widget.tutorDetailsViewModel.bookTutor(
-                    tutorId: widget.tutorId,
-                    bookingRequest: TutorBooking(
-                        null,
-                        null,
-                        null,
-                        startTimeInMillis,
-                        durationValues,
-                        _lessonType,
-                        ["Maths/Sample"],
-                        "",
-                        false));
+
+                if (repetitionValues == 0) {
+                  repetitionValues = 1;
+                }
+                for (int i = 0; i < repetitionValues; i++) {
+                  int value = 0;
+                  if (recurrenceValues == 'Daily') {
+                    value = 86400000;
+                  }
+                  if (recurrenceValues == 'BiWeekly') {
+                    value = 86400000 * 3;
+                  }
+                  if (recurrenceValues == 'Weekly') {
+                    value = 86400000 * 7;
+                  }
+                  final time = startTimeInMillis +
+                      value * i; //RecurrenceValue* i * //MilliSecondsInADay
+
+                  widget.tutorDetailsViewModel.bookTutor(
+                      tutorId: widget.tutorId,
+                      bookingRequest: TutorBooking(
+                          null,
+                          null,
+                          null,
+                          time,
+                          durationValues,
+                          _lessonType,
+                          ["Maths/Sample"],
+                          "",
+                          false));
+                }
               },
               icon: const Icon(Icons.send),
               label: const Text('Send Request'),
@@ -195,6 +232,23 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
         });
   }
 
+  Widget buildDropDownRepeat(
+      List<int> items, int? dropdownValueRepeat, Function(int?) onSelect) {
+    return DropdownButton<int?>(
+        value: dropdownValueRepeat,
+        items: items
+            .map((e) => DropdownMenuItem(
+                  child: Text(e.toString()),
+                  value: e,
+                ))
+            .toList(),
+        onChanged: (valueRepeat) {
+          setState(() {
+            onSelect.call(valueRepeat);
+          });
+        });
+  }
+
   Widget _buildDuration() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -205,6 +259,37 @@ class _BookingDialog extends State<BookingDialog> with RestorationMixin {
         ),
         buildDropDown(["30 mins", "45 mins", "1 hr"], durationValues, (value) {
           durationValues = value ?? "";
+        })
+      ],
+    );
+  }
+
+  Widget _buildRecurrence() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Text(
+          "Recurrence",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        buildDropDown(["Daily", "BiWeekly", "Weekly"], recurrenceValues,
+            (value) {
+          recurrenceValues = value ?? "";
+        })
+      ],
+    );
+  }
+
+  Widget _buildRepeat() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Text(
+          "Repeat",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        buildDropDownRepeat([0, 4, 6, 8], repetitionValues, (value) {
+          repetitionValues = value!;
         })
       ],
     );

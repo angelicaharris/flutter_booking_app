@@ -1,12 +1,8 @@
+import 'package:flutter_booking_app/chat/api/firebase_api.dart';
+import 'package:flutter_booking_app/chat/model/user.dart';
+import 'package:flutter_booking_app/chat/widget/chat_body_widget.dart';
+import 'package:flutter_booking_app/chat/widget/chat_header_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_booking_app/api/firebase_api.dart';
-import 'package:flutter_booking_app/pages/chats/model/user.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_booking_app/pages/chats/widgets/chat_body_widget.dart';
-import 'package:flutter_booking_app/pages/chats/widgets/chats_header_widget.dart';
 
 class ChatsPage extends StatelessWidget {
   @override
