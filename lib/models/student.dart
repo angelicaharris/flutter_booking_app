@@ -8,29 +8,28 @@ class Student {
   final String bio;
   final String avatar;
   final String docId;
-  final int datePosted;
   final Map<String, dynamic> interests;
 
-  Student(
-      {required this.name,
-      required this.email,
-      required this.price,
-      required this.bio,
-      required this.interests,
-      required this.avatar,
-      required this.docId,
-      required this.datePosted});
+  Student({
+    required this.name,
+    required this.email,
+    required this.price,
+    required this.bio,
+    required this.interests,
+    required this.avatar,
+    required this.docId,
+  });
 
-  factory Student.fromDocument(DocumentSnapshot doc) {
+  factory Student.fromDocument(Map doc, String id) {
     return Student(
-        name: doc['name'],
-        email: doc['email'],
-        price: priceFromDoc(doc),
-        bio: doc['bio'],
-        docId: doc.id,
-        avatar: doc['imageUrl'],
-        interests: doc['interests'],
-        datePosted: doc['datePosted']);
+      name: doc['name'] ?? 'Missing',
+      email: doc['email'] ?? 'Missing',
+      price: doc['price'] ?? 'Missing',
+      bio: doc['bio'] ?? 'Missing',
+      docId: id,
+      avatar: doc['imageUrl'] ?? 'Missing',
+      interests: doc['interests'] ?? 'Missing',
+    );
   }
 }
 

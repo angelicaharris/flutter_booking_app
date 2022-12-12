@@ -20,7 +20,7 @@ class MessageWidget extends StatelessWidget {
       children: <Widget>[
         if (!isMe)
           CircleAvatar(
-              radius: 16, backgroundImage: NetworkImage(message.urlAvatar)),
+              radius: 16, backgroundImage: NetworkImage(message.imageUrl)),
         Container(
           padding: EdgeInsets.all(16),
           margin: EdgeInsets.all(16),

@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_booking_app/chat/page/chats_page.dart';
 import 'package:flutter_booking_app/models/student.dart';
 import 'package:flutter_booking_app/pages/tutor_details_viewmodel.dart';
+import 'package:flutter_booking_app/services/students.dart';
 import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
@@ -74,6 +75,7 @@ class _HomePageState extends State<HomePage> {
       String type = data["userType"];
       //  price = data["price"];
       getUsers(type);
+      userType = type;
       image_url = data["imageUrl"];
       setState(() {});
     }
@@ -93,11 +95,13 @@ class _HomePageState extends State<HomePage> {
           print("Successfully completed => $event}");
           // parse data to our model
           usersSnap = event;
-          students =
-              event.docs.map((doc) => Student.fromDocument(doc)).toList();
-
+          students = event.docs
+              .map((doc) => Student.fromDocument(doc.data(), doc.id))
+              .toList();
+          print("studentList");
+          print(students);
           originalStudents = students;
-          userType = 'Student';
+          userType = 'Tutor';
 
           // update ui
           setState(() {});
@@ -117,7 +121,7 @@ class _HomePageState extends State<HomePage> {
               .toList();
 
           originalTutors = tutors;
-          userType = 'Tutor';
+          userType = 'Student';
           // update ui
           setState(() {});
         },
@@ -448,12 +452,15 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           //<-----Listing the users on homepage ----->
-          Flexible(child: Tutors(tutorList: tutors))
 
-          /* Container(
+          //    Flexible(child: Tutors(tutorList: tutors))
+
+          Container(
               child: (userType == 'Student')
                   ? Flexible(child: Tutors(tutorList: tutors))
-                  : Text('available students'))*/
+                  : Flexible(child: Students(studentList: students)))
+          // Text('available students'))
+          //Students(studentList: students)
         ],
       ),
     );

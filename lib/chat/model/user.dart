@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 
 import '../utils.dart';
@@ -9,40 +10,40 @@ class UserField {
 class User {
   final String idUser;
   final String name;
-  final String urlAvatar;
+  final String imageUrl;
   final DateTime lastMessageTime;
 
   const User({
     this.idUser = ' ',
     required this.name,
-    required this.urlAvatar,
+    required this.imageUrl,
     required this.lastMessageTime,
   });
 
   User copyWith({
     String? idUser,
     String? name,
-    String? urlAvatar,
+    String? imageUrl,
     String? lastMessageTime,
   }) =>
       User(
         idUser: idUser ?? this.idUser,
         name: name ?? this.name,
-        urlAvatar: urlAvatar ?? this.urlAvatar,
+        imageUrl: imageUrl ?? this.imageUrl,
         lastMessageTime: lastMessageTime as DateTime,
       );
 
-  static User fromJson(Map<String, dynamic> json) => User(
-        idUser: json['idUser'],
+  static User fromJson(Map<String, dynamic> json, String id) => User(
+        idUser: id,
         name: json['name'],
-        urlAvatar: json['urlAvatar'],
+        imageUrl: json['imageUrl'],
         lastMessageTime: Utils.toDateTime(json['lastMessageTime']) as DateTime,
       );
 
   Map<String, dynamic> toJson() => {
         'idUser': idUser,
         'name': name,
-        'urlAvatar': urlAvatar,
+        'imageUrl': imageUrl,
         'lastMessageTime': Utils.fromDateTimeToJson(lastMessageTime),
       };
 }

@@ -8,22 +8,22 @@ class MessageField {
 
 class Message {
   final String idUser;
-  final String urlAvatar;
+  final String imageUrl;
   final String username;
   final String message;
   final DateTime createdAt;
 
   const Message({
     required this.idUser,
-    required this.urlAvatar,
+    required this.imageUrl,
     required this.username,
     required this.message,
     required this.createdAt,
   });
 
-  static Message fromJson(Map<String, dynamic> json) => Message(
+  static Message fromJson(Map<String, dynamic> json, String id) => Message(
         idUser: json['idUser'],
-        urlAvatar: json['urlAvatar'],
+        imageUrl: json['imageUrl'],
         username: json['username'],
         message: json['message'],
         createdAt: Utils.toDateTime(json['createdAt']) as DateTime,
@@ -31,7 +31,7 @@ class Message {
 
   Map<String, dynamic> toJson() => {
         'idUser': idUser,
-        'urlAvatar': urlAvatar,
+        'imageUrl': imageUrl,
         'username': username,
         'message': message,
         'createdAt': Utils.fromDateTimeToJson(createdAt),

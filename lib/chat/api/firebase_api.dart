@@ -16,10 +16,18 @@ class FirebaseApi {
     final refMessages =
         FirebaseFirestore.instance.collection('chats/$idUser/messages');
 
+    final db = FirebaseFirestore.instance;
+    final docRef = db.collection("users").doc(idUser);
+    final doc = await docRef.get();
+    final userData = doc.data();
+    print('userData');
+    print(userData);
+    print('idUSer');
+    print(idUser);
     final newMessage = Message(
       idUser: idUser, //myId
-      urlAvatar: myUrlAvatar,
-      username: myUsername,
+      imageUrl: userData!['imageUrl'] ?? myimageUrl,
+      username: userData!['name'] ?? myUsername,
       message: message,
       createdAt: DateTime.now(),
     );

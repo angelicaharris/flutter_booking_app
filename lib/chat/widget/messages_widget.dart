@@ -2,6 +2,7 @@ import 'package:flutter_booking_app/chat/api/firebase_api.dart';
 import 'package:flutter_booking_app/chat/model/message.dart';
 import 'package:flutter_booking_app/chat/widget/message_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_booking_app/chat/widget/new_message_widget.dart';
 
 import '../data.dart';
 
