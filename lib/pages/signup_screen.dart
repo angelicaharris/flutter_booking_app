@@ -28,6 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? image_url;
   //Radio Button Variable
   UserTypeEnum? _UserTypeEnum;
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void _createUser(
@@ -273,6 +274,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   print("_pickedImage => $_pickedImage");
 
+                  //Step 1
+
                   _auth
                       .createUserWithEmailAndPassword(
                           email: _emailTextController.text,
@@ -280,7 +283,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       .then((userCredential) async {
                     print("Created New Account");
                     final userId = userCredential.user!.uid;
-                    final ref = FirebaseStorage.instance
+                    final ref = FirebaseStorage.instance //step 2
                         .ref()
                         .child('usersImages')
                         .child(userId)
@@ -288,6 +291,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     await ref.putFile(_pickedImage!);
                     image_url = await ref.getDownloadURL();
                     print("$image_url");
+                    //step 3
                     _createUser(userId, _userNameTextController.text,
                         _emailTextController.text, userType, image_url ?? "");
 

@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
       email = data["email"];
       String type = data["userType"];
       //  price = data["price"];
-      getUsers(type);
+      getUsers(type); //step 2
       userType = type;
       image_url = data["imageUrl"];
       setState(() {});
@@ -91,6 +91,7 @@ class _HomePageState extends State<HomePage> {
       final userRef =
           db.collection("users").where('userType', isEqualTo: 'Student');
       userRef.snapshots().listen(
+        //realtime
         (event) {
           print("Successfully completed => $event}");
           // parse data to our model
@@ -136,6 +137,7 @@ class _HomePageState extends State<HomePage> {
 
     super.initState();
 
+//step 1
     getCurrentUser();
 
     //<----------- Firestore SECURITY RULE -------------->
@@ -395,6 +397,7 @@ class _HomePageState extends State<HomePage> {
       body: new Column(
         children: <Widget>[
           MultiSelectDialogField(
+            //step 3
             items: subjects.map((e) => MultiSelectItem(e, e)).toList(),
             listType: MultiSelectListType.CHIP,
             onConfirm: (values) {

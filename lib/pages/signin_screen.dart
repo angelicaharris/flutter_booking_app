@@ -53,16 +53,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 forgetPassword(context),
                 firebaseUIButton(context, "Sign In", () {
-                  FirebaseAuth.instance
+                  FirebaseAuth.instance //step 1 signin
                       .signInWithEmailAndPassword(
                           email: _emailTextController.text,
                           password: _passwordTextController.text)
                       .then((value) {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HomePage()));
-                  }).onError((error, stackTrace) {
-                    print("Error ${error.toString()}");
-                  });
+                  }).onError((error, stackTrace) {});
                 }),
                 signUpOption()
               ],

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_booking_app/chat/api/firebase_api.dart';
 import 'package:flutter_booking_app/chat/model/message.dart';
 import 'package:flutter_booking_app/chat/widget/message_widget.dart';
@@ -35,10 +36,13 @@ class MessagesWidget extends StatelessWidget {
                         itemCount: messages!.length,
                         itemBuilder: (context, index) {
                           final message = messages[index];
-
+                          print("USER ID");
+                          print(idUser + " == " + message.idUser);
+                          print(FirebaseAuth.instance.currentUser?.uid);
                           return MessageWidget(
                             message: message,
-                            isMe: message.idUser == myId,
+                            isMe: message.idUser ==
+                                FirebaseAuth.instance.currentUser?.uid,
                           );
                         },
                       );

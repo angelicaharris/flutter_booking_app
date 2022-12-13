@@ -10,8 +10,12 @@ class Utils {
               List<T>>.fromHandlers(
             handleData: (QuerySnapshot<Map<String, dynamic>> data,
                 EventSink<List<T>> sink) {
-              final users =
-                  data.docs.map((doc) => fromJson(doc.data(), doc.id)).toList();
+              final users = data.docs.map((doc) {
+                print("TRANSFORMED DATA");
+                print(doc.data());
+                print(doc.id);
+                return fromJson(doc.data(), doc.id);
+              }).toList();
               // final users = snaps.map((json) => fromJson(json, )).toList();
 
               sink.add(users);
